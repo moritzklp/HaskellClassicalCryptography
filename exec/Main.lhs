@@ -1,6 +1,16 @@
 \section{One Time Pad}\label{sec:OTP}
 
-In this section we implement the one time pad.
+In this section we implement the main functionality of the One-Time Pad cipher. This implementation provides a command-line interface that allows users to generate keys, encrypt plaintext messages, and decrypt ciphertext back to the original text. The design emphasizes clarity and modularity, leveraging the helper functions from the \texttt{Pad} module.
+
+Key aspects of the implementation include:
+\begin{itemize}
+    \item \textbf{Key Generation:} Two approaches are provided. One function generates a random key of a specified length, while another automatically generates a key that exactly matches the length of the input plaintext.
+    \item \textbf{Encryption and Decryption:} Both operations use the same \texttt{padString} function to perform a bitwise XOR between the message and the key. This ensures that encryption and decryption are symmetric, as applying the XOR operation twice with the same key returns the original message.
+    \item \textbf{Command-Line Interface:} The \texttt{main} function parses command-line arguments to determine whether to generate a key, encrypt a message, or decrypt a message. Clear usage instructions are provided for cases when the arguments do not match any of the expected patterns.
+    \item \textbf{Random Key Generation:} By using Haskell's random number generator, the program creates a key consisting of uppercase letters, ensuring that each key is unpredictable and secure when used only once.
+\end{itemize}
+
+The following code block contains the complete implementation of the OTP functionality:
 
 \begin{code}
 module Main where
@@ -59,20 +69,6 @@ main = do
 
 \end{code}
 
-We can run this program with the commands:
 
-\begin{verbatim}
-stack build
-stack exec myprogram
-\end{verbatim}
 
-The output of the program is something like this:
 
-\begin{verbatim}
-Hello!
-[1,2,3,4,5,6,7,8,9,10]
-[100,100,300,300,500,500,700,700,900,900]
-[1,3,0,1,1,2,8,0,6,4]
-[100,300,42,100,100,100,700,42,500,300]
-GoodBye
-\end{verbatim}
