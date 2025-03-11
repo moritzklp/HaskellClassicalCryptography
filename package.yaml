@@ -17,6 +17,8 @@ dependencies:
   - parsec
   - random
   - template-haskell
+  - bytestring
+  - entropy
 
 library:
   source-dirs: lib

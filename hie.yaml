@@ -6,6 +6,9 @@ cradle:
     - path: "./exec/Main.lhs"
       component: "report:exe:myprogram"
 
+    - path: "./exec/Pad.lhs"
+      component: "report:exe:myprogram"
+
     - path: "./exec/Paths_report.hs"
       component: "report:exe:myprogram"
 
