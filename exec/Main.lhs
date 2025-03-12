@@ -45,7 +45,7 @@ decryptIO output inputFile keyFile = do
 
 -- Generate a random key of a given length (inside IO) - to not provide a seed manually
 generateRandomKeyIO :: Int -> IO String
-generateRandomKeyIO n = take n . randomRs ('A', 'Z') <$> newStdGen
+generateRandomKeyIO n = take n . randomRs ('!', '~') <$> newStdGen
 
 -- Given a plaintext, should generate a key of the same length
 generateKeyFromPlaintextIO :: String -> String -> IO ()
