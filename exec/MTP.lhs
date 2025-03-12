@@ -4,17 +4,22 @@ module MTP where
 
 import Data.Bits (xor)
 import Data.Char (chr, ord)
-import Data.List (transpose, maximumBy)
+import Data.List (transpose, maximumBy, isSuffixOf)
 import Data.Ord (comparing)
-import System.Environment (getArgs)
+import System.IO
+import System.Directory (listDirectory)
 
 mtp :: IO ()
 mtp = do
-    args <- getArgs
-    if null args
-        then putStrLn "Usage: mtp-attack [ciphertext files...]"
+    hSetBuffering stdin LineBuffering -- So we can use backspace while running this using ghci
+    putStrLn "Please enter the folder name containing ciphertext files:"
+    folder <- getLine
+    files <- listDirectory folder
+    let txtFiles = [folder ++ "/" ++ f | f <- files, ".txt" `isSuffixOf` f]
+    if null txtFiles
+        then putStrLn "No .txt files found in the specified folder."
         else do
-            ciphertexts <- mapM readFile args
+            ciphertexts <- mapM readFile txtFiles
             let minLen = minimum (map length ciphertexts)
                 truncated = map (take minLen) ciphertexts
                 cipherAscii = map (map ord) truncated

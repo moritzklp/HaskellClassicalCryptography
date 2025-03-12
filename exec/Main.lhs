@@ -15,15 +15,9 @@ The following code block contains the complete implementation of the OTP functio
 \begin{code}
 module Main where
 
-import System.Environment (getArgs)
+import System.IO
 import System.Random (randomRs, newStdGen)
 import Pad
-
--- Should generate a key of length n and write it to a file
-generateKeyIO :: String -> Int -> IO ()
-generateKeyIO keyfile n = do
-    key <- generateRandomKeyIO n
-    writeFile keyfile key
 
 -- Should read plaintext from input file and key from key file
 -- Should write ciphertext to output file
@@ -57,15 +51,33 @@ generateKeyFromPlaintextIO inputFile keyfile = do
 
 main :: IO ()
 main = do
-    args <- getArgs
-    case args of
-        ("generate":inputFile:keyFile:_) -> generateKeyFromPlaintextIO inputFile keyFile
-        ("encrypt":outputFile:inputFile:keyFile:_) -> encryptIO outputFile inputFile keyFile
-        ("decrypt":outputFile:inputFile:keyFile:_) -> decryptIO outputFile inputFile keyFile
-        _ -> putStrLn "Invalid arguments. Usage:\n\
-                      \  generate [input-file.txt] [key-file.txt]\n\
-                      \  encrypt [output-file.txt] [input-file.txt] [key-file.txt]\n\
-                      \  decrypt [output-file.txt] [input-file.txt] [key-file.txt]"
+    hSetBuffering stdin LineBuffering -- So we can use backspace while running this using ghci
+    putStrLn "Hello, do you want to generate a key, encrypt, or decrypt? (generate/encrypt/decrypt)"
+    method <- getLine
+    case method of
+        "generate" -> do
+            putStrLn "In what file do you want to store the key? (e.g., key.txt)"
+            keyFile <- getLine
+            putStrLn "What plaintext do you want to generate a key for? (e.g., input.txt)"
+            inputFile <- getLine
+            generateKeyFromPlaintextIO inputFile keyFile
+        "encrypt" -> do
+            putStrLn "In what file do you want to store the ciphertext? (e.g., output.txt)"
+            outputFile <- getLine
+            putStrLn "What plaintext do you want to encrypt? (e.g., input.txt)"
+            inputFile <- getLine
+            putStrLn "What key do you want to use? (e.g., key.txt)"
+            keyFile <- getLine
+            encryptIO outputFile inputFile keyFile
+        "decrypt" -> do
+            putStrLn "In what file do you want to store the plaintext? (e.g., output.txt)"
+            outputFile <- getLine
+            putStrLn "What ciphertext do you want to decrypt? (e.g., input.txt)"
+            inputFile <- getLine
+            putStrLn "What key do you want to use? (e.g., key.txt)"
+            keyFile <- getLine
+            decryptIO outputFile inputFile keyFile
+        _ -> putStrLn "Invalid method. Please choose 'generate', 'encrypt', or 'decrypt'."
 
 \end{code}
 
