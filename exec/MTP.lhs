@@ -1,27 +1,34 @@
 
+<<<<<<< HEAD
 \section{Many Time Pad Attack}
 As previously stated, the One Time Pad is secure and resistant to attacks. However, in case where not all the keys are unique, so a key is reused, it is possible to break the encyption. The method to do it is called a Many Time Pad Attack.
 The cipher becomes vulnerable because if two plaintexts have been ecypted with the same key, performing the XOR operation on the cipher-texts will have the same result as doing it with the original plaintexts. What it means is that we remove the secret key from the equation completely. This is shown in the equation: [insert equation]
 
 
 
+=======
+>>>>>>> main
 \begin{code}
 module MTP where
 
 import Data.Bits (xor)
 import Data.Char (chr, ord)
-import Data.List (transpose, maximumBy)
+import Data.List (transpose, maximumBy, isSuffixOf)
 import Data.Ord (comparing)
-import System.Environment (getArgs)
-
+import System.IO
+import System.Directory (listDirectory)
 
 mtp :: IO ()
 mtp = do
-    args <- getArgs
-    if null args
-        then putStrLn "Usage: mtp-attack [ciphertext files...]"
+    hSetBuffering stdin LineBuffering -- So we can use backspace while running this using ghci
+    putStrLn "Please enter the folder name containing ciphertext files:"
+    folder <- getLine
+    files <- listDirectory folder
+    let txtFiles = [folder ++ "/" ++ f | f <- files, ".txt" `isSuffixOf` f]
+    if null txtFiles
+        then putStrLn "No .txt files found in the specified folder."
         else do
-            ciphertexts <- mapM readFile args
+            ciphertexts <- mapM readFile txtFiles
             let minLen = minimum (map length ciphertexts)
                 truncated = map (take minLen) ciphertexts
                 cipherAscii = map (map ord) truncated
@@ -56,3 +63,5 @@ guessKeyByte column =
         else fst $ maximumBy (comparing snd) candidates
 
 \end{code}
+
+
