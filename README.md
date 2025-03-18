@@ -28,5 +28,5 @@ The folder ciphertexts contains text files with ciphertexts to be dectrypted. Th
 
 
 ### Caesar Cipher Attack
-**Brute Force** (WIP): Tries all possible shifts (0-25) and displays possible plaintexts only with the possibility to decrypt
+**Brute Force** (WIP): Tries all possible shifts (0-25) and displays possible plaintexts (only the possibility to decrypt)
 
