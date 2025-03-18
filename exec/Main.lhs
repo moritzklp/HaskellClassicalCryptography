@@ -1,6 +1,19 @@
-\section{One Time Pad}\label{sec:OTP}
+\section{One Time Pad}
+\label{sec:OTP}
 
 In this section we implement the main functionality of the One-Time Pad cipher. This implementation provides a command-line interface that allows users to generate keys, encrypt plaintext messages, and decrypt ciphertext back to the original text. The design emphasizes clarity and modularity, leveraging the helper functions from the \texttt{Pad} module.
+
+The \textbf{One-Time Pad (OTP)} is a theoretically perfect encryption scheme when used properly. However, its security guarantees completely break down when the same key is reused multiple times, creating what's known as a \textbf{Multi-Time Pad} or \textbf{Two-Time Pad} vulnerability \cite{Lugrin23}.
+
+The OTP operates using:
+\begin{itemize}
+\item Plaintext message $m$
+\item Secret key $k$ (random bits, length $= |m|$)
+\item Ciphertext $c = m \oplus k$ (where $\oplus$ denotes XOR)
+\end{itemize}
+
+Decryption is performed as:
+\[ m = c \oplus k \]
 
 Key aspects of the implementation include:
 \begin{itemize}
