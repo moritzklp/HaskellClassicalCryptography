@@ -9,8 +9,7 @@ The project also demonstrates possible attacks on those ciphers: **Many-Time Pad
 - Key generation
 - Message Encryption/Decryption
 - Decryption of multiple ciphertexts encrypted with the same one-time pad key using the Many-Time Pad attack
-- Frequency analysis for breaking mono-alphabetic substitutions such as the Caesar Cipher
-- Implementation of **Caesar Cipher Attack** using brute force
+- Partial implementation of **Caesar Cipher Attack** using brute force
 
 ## Usage
 For running a demonstration of the **Many-Time Pad attack** (ciphertexts in /ciphertexts/mtp.txt):
@@ -28,5 +27,5 @@ The folder ciphertexts contains text files with ciphertexts to be dectrypted. Th
 
 
 ### Caesar Cipher Attack
-**Brute Force** (WIP): Tries all possible shifts (0-25) and displays possible plaintexts (only the possibility to decrypt)
+**Brute Force** (WIP): Tries all possible shifts (0-25) and displays possible plaintexts (only the possibility to decrypt).
 
