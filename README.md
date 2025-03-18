@@ -17,11 +17,6 @@ For running a demonstration of the **Many-Time Pad attack** (ciphertexts in /cip
 ```sh
 $ stack run
 ```
-For running the **Caesar Cipher attack**:
-```sh
-$ stack run
-```
-This will attempt brute-force decryption of a message encrypted with the Caesar cipher.
 
 ## How It Works
 ### Many Time Pad Attack
@@ -33,7 +28,5 @@ The folder ciphertexts contains text files with ciphertexts to be dectrypted. Th
 
 
 ### Caesar Cipher Attack
-1. **Brute Force** (WIP): Tries all possible shifts (0-25) and displays possible plaintexts
-2. **Frequency Analysis**: Uses letter frequency statistics to guess the most likely shift
-3. **User Interaction** (WIP): Allows users to refine results manually
+**Brute Force** (WIP): Tries all possible shifts (0-25) and displays possible plaintexts only with the possibility to decrypt
 
