@@ -25,6 +25,11 @@ xorBytes bs1 bs2 = B.pack (B.zipWith xor bs1 bs2)
 padString :: String -> String -> String
 padString s1 s2 = C.unpack $ xorBytes (C.pack s1) (C.pack s2)
 
+-- xor first bytestring with all the others
+xorCipherTexts :: [B.ByteString] -> [B.ByteString]
+xorCipherTexts (c:cx) = map (xorBytes c) cx
+
+
 -- main :: IO ()
 -- main = do
 --     let bytes1 = B.pack [0x01, 0x02, 0x03, 0x04]  -- First byte array
