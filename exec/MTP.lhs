@@ -65,85 +65,10 @@ encryptedMessages = ["d9dd0e68af89e6447cec0b107e576f20ec64ada45c3cd7b5ccbd27bc3f
     "a19d5a4eac8be0427af703126a576827e532aced4a28dda5c5b629aa24bc71cce1af9fee31e40439bfcb26b7d842e5627c675529cbe1abe1c44253769632e07034947441d7d62ca8fb8e648e210484d5d3aa5160912522b092f1f08b8c81e3036263809483d67c9200ad01c2babb405ad37c11d76acceba7e82508e08a12f87aef84c8185430faa4cd891ee64201c27cc969e913004e289e12f404f662769fe3819d8dd1e03905f9aed8b5f37fb2012c5a479499297ebca0da9e687a5bffb46225830d5c0daa0736416aba55f77b0bcefd84923d5068f5c0804b8c8b"
     ]
 
--- Convert a hexadecimal string to a ByteString
-hexToBytes :: String -> BS.ByteString
-hexToBytes [] = BS.empty
-hexToBytes (a:b:rest) = BS.cons (fromIntegral $ hexValue a * 16 + hexValue b) (hexToBytes rest)
-hexToBytes _ = error "Invalid hex string: input must have even number of characters"
-
--- Convert a single hex character to its integer value
-hexValue :: Char -> Int
-hexValue c
-    | c >= '0' && c <= '9' = ord c - ord '0'
-    | c >= 'a' && c <= 'f' = ord c - ord 'a' + 10
-    | c >= 'A' && c <= 'F' = ord c - ord 'A' + 10
-    | otherwise = error $ "Invalid hex character: " ++ [c]
-
--- XOR two ByteStrings together
-bytesXor :: BS.ByteString -> BS.ByteString -> BS.ByteString
-bytesXor a b = BS.pack $ zipWith xor (BS.unpack a) (BS.unpack b)
-
--- Check if a byte is likely to be a space in plaintext
-isLikelySpace :: Word8 -> Bool
-isLikelySpace byte =
-    (byte >= 65 && byte <= 90)      -- Uppercase letters (A-Z)
-    || (byte >= 97 && byte <= 122)  -- Lowercase letters (a-z)
-    || byte == 0                    -- Null byte (possible padding)
-
--- Convert a byte check to a binary indicator (1 for space locations, 0 otherwise)
-markAsSpace :: Word8 -> Int
-markAsSpace byte | isLikelySpace byte = 1
-                 | otherwise = 0
-
--- Find likely space positions for two ciphertexts
-detectSpacePositions :: BS.ByteString -> BS.ByteString -> [Int]
-detectSpacePositions ciphertext1 ciphertext2 =
-    map (markAsSpace . BS.index (bytesXor ciphertext1 ciphertext2)) [0 .. BS.length ciphertext1 - 1]
-
--- Find likely space positions for all ciphertexts
--- A position is likely a space if it produces a letter when XORed with most other ciphertexts
-findLikelySpaces :: BS.ByteString -> [BS.ByteString] -> [Int]
-findLikelySpaces target otherCiphertexts =
-    let initialCounts = replicate (BS.length target) 0
-        spaceIndicators = map (detectSpacePositions target) otherCiphertexts
-        -- Sum the space indicators for each position
-        voteCounts = foldr (zipWith (+)) initialCounts spaceIndicators
-        -- Mark positions with high space indicator counts as likely spaces
-        threshold = length otherCiphertexts - 2
-    in map (\count -> if count > threshold then 1 else 0) voteCounts
-
--- Process all ciphertexts to find likely space positions in each of them
-analyzeAllCiphertexts :: [BS.ByteString] -> [(BS.ByteString, [Int])]
-analyzeAllCiphertexts ciphertexts =
-    map (\cipher -> (cipher, findLikelySpaces cipher (filter (/= cipher) ciphertexts))) ciphertexts
-
--- Update the space key based on detected space positions
--- The space key is represented as a list of Maybe Word8, where Nothing means unknown
-updateSpaceKey :: [Maybe Word8] -> [(BS.ByteString, [Int])] -> [Maybe Word8]
-updateSpaceKey = foldl' updateFromCiphertext
-  where
-    updateFromCiphertext currentKey (ciphertext, spaceIndicators) =
-        zipWith updateKeyByte currentKey (zip (BS.unpack ciphertext) spaceIndicators)
-
-    updateKeyByte currentByte (ciphertextByte, isSpace) = case (currentByte, isSpace) of
-        (Nothing, 1) -> Just ciphertextByte
-        (Just existing, 1) | existing == ciphertextByte -> Just existing
-        _ -> currentByte
-
--- Convert a space key to actual encryption key
--- The encryption key is the space key XORed with the space character (0x20)
-deriveKey :: [Maybe Word8] -> [Maybe Word8]
-deriveKey = map (fmap (\b -> b `xor` fromIntegral (ord ' ')))
-
--- Decrypt a ciphertext using the partial key
-breakWithPartialKey :: [Word8] -> [Maybe Word8] -> String
-breakWithPartialKey = zipWith decryptByte
-  where
-    decryptByte cByte Nothing = '.'
-    decryptByte cByte (Just keyByte) =
-        if cByte == keyByte
-        then ' '
-        else chr $ fromIntegral (cByte `xor` keyByte)
+main :: IO ()
+main = do
+    let ciphertexts = map hexToBytes encryptedMessages
+    mapM_ (breakIO ciphertexts) ciphertexts
 
 -- Process and decrypt a single ciphertext using information from all ciphertexts
 breakIO :: [BS.ByteString] -> BS.ByteString -> IO ()
@@ -156,18 +81,86 @@ breakIO allCiphertexts targetCiphertext = do
 
     -- Initialize empty key and update it with space information
     let emptyKey = replicate (fromIntegral $ BS.length targetCiphertext) Nothing
-    let spaceKey = updateSpaceKey emptyKey ciphertextsWithSpaceInfo
-
-    -- Derive the actual encryption key from the space key
-    let encryptionKey = deriveKey spaceKey
+    let partialKey = createPartialKey emptyKey ciphertextsWithSpaceInfo
 
     -- Decrypt the target ciphertext
-    putStrLn $ breakWithPartialKey (BS.unpack targetCiphertext) encryptionKey
+    putStrLn $ breakWithPartialKey (BS.unpack targetCiphertext) partialKey
 
-main :: IO ()
-main = do
-    let ciphertexts = map hexToBytes encryptedMessages
-    mapM_ (breakIO ciphertexts) ciphertexts
+
+
+-- XOR two ByteStrings together
+bytesXor :: BS.ByteString -> BS.ByteString -> BS.ByteString
+bytesXor a b = BS.pack $ zipWith xor (BS.unpack a) (BS.unpack b)
+
+-- Convert a hexadecimal string to a ByteString
+hexToBytes :: String -> BS.ByteString
+hexToBytes [] = BS.empty
+hexToBytes (a:b:rest) = BS.cons (fromIntegral $ hexValue a * 16 + hexValue b) (hexToBytes rest)
+    where
+        hexValue :: Char -> Int
+        hexValue c
+            | c >= '0' && c <= '9' = ord c - ord '0'
+            | c >= 'a' && c <= 'f' = ord c - ord 'a' + 10
+            | c >= 'A' && c <= 'F' = ord c - ord 'A' + 10
+            | otherwise = error $ "Invalid hex character: " ++ [c]
+hexToBytes _ = error "Invalid hex string: ciphertext must have even number of characters hex characters"
+
+
+
+-- Check if a byte is likely to be a space in plaintext (1 for space locations, 0 otherwise)
+markAsSpace :: Word8 -> Int
+markAsSpace byte | isLikelySpace byte = 1
+                 | otherwise = 0
+    where isLikelySpace b = (b >= 65 && b <= 90) || (b >= 97 && b <= 122) || b == 0
+
+-- Find likely space positions for two ciphertexts
+detectSpacePositions :: BS.ByteString -> BS.ByteString -> [Int]
+detectSpacePositions ciphertext1 ciphertext2 =
+    map (markAsSpace . BS.index (bytesXor ciphertext1 ciphertext2)) [0 .. BS.length ciphertext1 - 1]
+
+-- Find likely space positions for all ciphertexts
+-- A position is likely a space if it produces a letter when XORed with most other ciphertexts
+findLikelySpaces :: BS.ByteString -> [BS.ByteString] -> [Int]
+findLikelySpaces target otherCiphertexts =
+    let initialCounts = replicate (BS.length target) 0
+        spaceIndicators = map (detectSpacePositions target) otherCiphertexts
+        voteCounts = foldr (zipWith (+)) initialCounts spaceIndicators
+        threshold = length otherCiphertexts - 2
+    in map (\count -> if count > threshold then 1 else 0) voteCounts
+
+-- Perform the findLikelySpaces function on each ciphertext to find likely space positions in each of them
+analyzeAllCiphertexts :: [BS.ByteString] -> [(BS.ByteString, [Int])]
+analyzeAllCiphertexts ciphertexts =
+    map (\cipher -> (cipher, findLikelySpaces cipher (filter (/= cipher) ciphertexts))) ciphertexts
+
+
+
+-- Create the partial key from the space information
+-- Apply the updatePartialKey to the key for each ciphertext
+createPartialKey :: [Maybe Word8] -> [(BS.ByteString, [Int])] -> [Maybe Word8]
+createPartialKey emptyKey ciphertextsWithSpaces = xorWithSpace (foldl updatePartialKey emptyKey ciphertextsWithSpaces)
+    where
+        xorWithSpace = map (fmap (\b -> b `xor` fromIntegral (ord ' ')))
+
+-- Update the partial key with the space information from a single ciphertext
+updatePartialKey ::  [Maybe Word8] -> (BS.ByteString, [Int]) -> [Maybe Word8]
+updatePartialKey oldKey (cipherText, spaceIndicators) = zipWith updateKeyByte oldKey (zip (BS.unpack cipherText) spaceIndicators)
+    where 
+        updateKeyByte currentByte (ciphertextByte, isSpace) = case (currentByte, isSpace) of
+            (Nothing, 1) -> Just ciphertextByte
+            (Just existing, 1) | existing == ciphertextByte -> Just existing
+            _ -> currentByte
+
+
+
+-- Decrypt a ciphertext using the partial key
+breakWithPartialKey :: [Word8] -> [Maybe Word8] -> String
+breakWithPartialKey = zipWith decryptByte
+  where
+    decryptByte b Nothing = '.'
+    decryptByte b (Just keyByte) =
+        if b == keyByte
+        then ' '
+        else chr $ fromIntegral (b `xor` keyByte)
+
 \end{code}
-
-
