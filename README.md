@@ -1,9 +1,13 @@
 # Classical cryptography in Haskell
 
 ## Introduction
-This project demonstrates a **Many-Time Pad Attack** and a **Caesar Cipher Attack** implemented in **Haskell**. The Many Time Pad Attack exploits the reuse of a one-time pad key across multiple ciphertexts, while the Caesar Cipher Attack decrypts messages encrypted using simple shift-based encryption.
+This project implements popular cryptographic ciphers in **Haskell**. Currently two ciphers are implemented: **Caesar Cipher** and **One-Time Pad**.
+
+The project also demonstrates the most popular attacks on those ciphers: **Many-Time Pad Attack** and **Frequency Analysis**. The Many Time Pad Attack exploits the reuse of a one-time pad key across multiple ciphertexts, while the Frequency Analysis can decrypt messages encrypted using a simple shift-based encryption like Caesar Cipher.
 
 ## Features
+- Key generation
+- Message Encryption/Decryption
 - Decryption of multiple ciphertexts encrypted with the same one-time pad key
 - Frequency analysis for efficient decryption
 - Implementation of **Caesar Cipher Attack** using brute force
@@ -29,7 +33,7 @@ The folder ciphertexts contains text files with ciphertexts to be dectrypted. Th
 
 
 ### Caesar Cipher Attack
-1. **Brute Force**: Tries all possible shifts (0-25) and displays possible plaintexts
+1. **Brute Force** (WIP): Tries all possible shifts (0-25) and displays possible plaintexts
 2. **Frequency Analysis**: Uses letter frequency statistics to guess the most likely shift
-3. **User Interaction**: Allows users to refine results manually
+3. **User Interaction** (WIP): Allows users to refine results manually
 

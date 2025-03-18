@@ -35,6 +35,7 @@ module Main where
 import System.IO
 import System.Random (randomRs, newStdGen)
 import Pad
+import MTP
 
 -- Should read plaintext from input file and key from key file
 -- Should write ciphertext to output file
@@ -69,7 +70,7 @@ generateKeyFromPlaintextIO inputFile keyfile = do
 main :: IO ()
 main = do
     hSetBuffering stdin LineBuffering -- So we can use backspace while running this using ghci
-    putStrLn "Hello, do you want to generate a key, encrypt, or decrypt? (generate/encrypt/decrypt)"
+    putStrLn "Hello, do you want to generate a key, encrypt, decrypt or execute the Multi-Time Pad attack? (generate/encrypt/decrypt/mtp)"
     method <- getLine
     case method of
         "generate" -> do
@@ -94,6 +95,10 @@ main = do
             putStrLn "What key do you want to use? (e.g., key.txt)"
             keyFile <- getLine
             decryptIO outputFile inputFile keyFile
+        "mtp" -> do
+             hexciphertexts <- loadHexList "ciphertexts/mtp.txt"
+             let ciphertexts = map hexToBytes hexciphertexts
+             mapM_ (breakIO ciphertexts) ciphertexts
         _ -> putStrLn "Invalid method. Please choose 'generate', 'encrypt', or 'decrypt'."
 
 \end{code}
