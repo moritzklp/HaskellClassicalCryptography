@@ -3,7 +3,7 @@
 ## Introduction
 This project implements popular cryptographic ciphers in **Haskell**. Currently two ciphers are implemented: **Caesar Cipher** and **One-Time Pad**.
 
-The project also demonstrates possible attacks on those ciphers: **Many-Time Pad Attack** and **Frequency Analysis**. The Many Time Pad Attack exploits the reuse of a one-time pad key across multiple ciphertexts, while the Frequency Analysis can decrypt messages encrypted using a simple shift-based encryption like Caesar Cipher.
+The project also demonstrates possible attacks on those ciphers: **Many-Time Pad Attack** and **Frequency Analysis**. The Many Time Pad Attack exploits the reuse of a one-time pad key across multiple ciphertexts.
 
 ## Features
 - Key generation
