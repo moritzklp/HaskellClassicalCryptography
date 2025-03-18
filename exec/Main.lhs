@@ -11,13 +11,37 @@ Key aspects of the implementation include:
 \end{itemize}
 
 \subsection{Why Haskell}\label{sec:why_haskell}
-\subsubsection{Performance and Efficiency}
-\paragraph{Compiled and Optimized Execution} Empirical studies show that cryptographic code in Haskell can approach the speed of C. For example, a CAST-128 block cipher implemented in optimized Haskell ran within the same order of magnitued as equivalent C code. It remained under one second for test cases and only up to four times slower than C !!cite. This indicates that even computationally intensive cryptographic tasks can be handled in Haskell with acceptable overhead. 
-Native code: Unlike Python, Ruby, JavaScript, Lua, and other interpreted languages, Haskell is compiled ahead-of-time, directly to native machine code. The compiler (GHC) is remarkably good at optimization and generating efficient executables. This makes Haskell a great choice for applications that require good performance, such as high-throughput data processing.
-\paragraph{Performance}
-\paragraph{Security Aspects}
-Memory safety: Manual memory management in C and C++ often leads to buffer overflows, use-after-free, memory leaks, and other memory-related bugs. This results in security vulnerabilities (see “Observed Examples” for CWE-416: Use After Free). Software written in Haskell is unlikely to exhibit such issues thanks to automatic memory management. Memory safety is a common trait among modern languages, including Java, Python, Go, JavaScript, Rust, and others, and it is absolutely essential for writing secure software.
-\paragraph{Benefits(purity, type safety)}
+
+\paragraph{Compiled and Optimized Execution} Studies have shown that Haskell implementations of cryptographic functions can perform nearly as well as C. 
+For example, a Haskell implementation of the CAST-128 cipher ran within the same order of magnitude as an equivalent C version. 
+This proves that it can handle computationally intensive cryptographic tasks.
+
+\paragraph{Lazy Evaluation} Haskell uses lazy evaluation, which means that it only computes the values when they are needed.
+This can help to improve the efficiency by avoiding unnecessary calculations. 
+For our many-time pad attack this would help to handle large ciphertexts efficiently by processing them only when required.
+This also helps to reduce the memory usage and computation overhead.
+
+\paragraph{Memory Safety}
+Unlike languages like C, Haskell automatically manages the memory, preventing vulnerabilities such as buffer overflows and pointer-related bugs.
+This is important in cryptographic applications because small memory errors can lead to security flaws. 
+With Haskell we do not have to worry about memory corruption or unexpected behavior due to false memory management.
+
+\paragraph{Strong Type System}
+Haskell has a strong type system that ensures that variables hold only correct kinds of values. 
+This reduces the programming mistakes such as mixing up data types or performing incorrect calculations on data.
+The type system also prevents unintended operations, such as treating a byte array as a string, which could introduce security risks in cryptographic applications.
+
+\paragraph{Immutability}
+Haskell's immutability (by default) means that once a value is created, it cannot be changed. 
+This prevents unintended modifications of the data during the execution, which can be a problem in other languages where variables can be overwritten accidentally.
+
+\paragraph{Arbitrary Precision Arithmetic}
+Haskell allows computations with arbitrary large numbers which prevents the overflow issues that are common in many other languages.
+This is useful in cryptographic application where calculations may involve large integers, and unexpected overflows could lead to incorrect results.
+
+\paragraph{Purity}
+Haskell's pure functions make sure that the same input always produces the same output, which makes cryptographic computations easier to test and debug. 
+Since there are no hidden side effects, cryptographic functions can be verified more easily than in imperative languages.
 
 
 \subsection{Code}\label{sec:code}
