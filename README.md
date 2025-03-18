@@ -9,7 +9,7 @@ The project also demonstrates possible attacks on those ciphers: **Many-Time Pad
 - Key generation
 - Message Encryption/Decryption
 - Decryption of multiple ciphertexts encrypted with the same one-time pad key using the Many-Time Pad attack
-- Partial implementation of **Caesar Cipher Attack** using brute force
+- Partial implementation of Caesar Cipher Attack using brute force
 
 ## Usage
 For running a demonstration of the **Many-Time Pad attack** (ciphertexts in /ciphertexts/mtp.txt):
