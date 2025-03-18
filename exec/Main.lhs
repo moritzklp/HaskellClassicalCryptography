@@ -10,6 +10,17 @@ Key aspects of the implementation include:
     \item \textbf{Random Key Generation:} By using Haskell's random number generator, the program creates a key consisting of uppercase letters, ensuring that each key is unpredictable and secure when used only once.
 \end{itemize}
 
+\subsection{Why Haskell}\label{sec:why_haskell}
+\subsubsection{Performance and Efficiency}
+\paragraph{Compiled and Optimized Execution} Empirical studies show that cryptographic code in Haskell can approach the speed of C. For example, a CAST-128 block cipher implemented in optimized Haskell ran within the same order of magnitued as equivalent C code. It remained under one second for test cases and only up to four times slower than C !!cite. This indicates that even computationally intensive cryptographic tasks can be handled in Haskell with acceptable overhead. 
+Native code: Unlike Python, Ruby, JavaScript, Lua, and other interpreted languages, Haskell is compiled ahead-of-time, directly to native machine code. The compiler (GHC) is remarkably good at optimization and generating efficient executables. This makes Haskell a great choice for applications that require good performance, such as high-throughput data processing.
+\paragraph{Performance}
+\paragraph{Security Aspects}
+Memory safety: Manual memory management in C and C++ often leads to buffer overflows, use-after-free, memory leaks, and other memory-related bugs. This results in security vulnerabilities (see “Observed Examples” for CWE-416: Use After Free). Software written in Haskell is unlikely to exhibit such issues thanks to automatic memory management. Memory safety is a common trait among modern languages, including Java, Python, Go, JavaScript, Rust, and others, and it is absolutely essential for writing secure software.
+\paragraph{Benefits(purity, type safety)}
+
+
+\subsection{Code}\label{sec:code}
 The following code block contains the complete implementation of the OTP functionality:
 
 \begin{code}
