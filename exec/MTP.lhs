@@ -1,3 +1,35 @@
+\section{Multi Time Pad}
+
+When the same key $k$ is reused for multiple messages $m_1, m_2$:
+\begin{align*}
+c_1 &= m_1 \oplus k \\
+c_2 &= m_2 \oplus k
+\end{align*}
+
+An attacker can compute:
+\[ c_1 \oplus c_2 = (m_1 \oplus k) \oplus (m_2 \oplus k) = m_1 \oplus m_2 \]
+
+This eliminates the key and reveals the XOR of plaintexts. While $m_1 \oplus m_2$ isn't immediately readable, attackers can use frequency analysis and known plaintext patterns to recover both messages \cite{Denning83}. \\
+
+For example: 
+
+Consider two messages encrypted with the same key:
+\begin{align*}
+m_1 &= \texttt{"HelloWorld"} \\
+m_2 &= \texttt{"SecureData"} \\
+k &= \texttt{0x5f1d3a...} \quad\text{(random bytes)}
+\end{align*}
+
+The attacker observes:
+\begin{align*}
+c_1 &= m_1 \oplus k \\
+c_2 &= m_2 \oplus k
+\end{align*}
+
+By computing $c_1 \oplus c_2$, the attacker gets $m_1 \oplus m_2$. If they guess part of $m_1$ (e.g., common phrase "Hello"), they can recover the corresponding part of $m_2$:
+\[ \text{Guessed } m_1 \oplus (m_1 \oplus m_2) = m_2 \]
+
+
 
 \section{Many Time Pad Attack}
 As previously stated, the One Time Pad is secure and resistant to attacks. However, in case where not all the keys are unique, so a key is reused, it is possible to break the encyption. The method to do it is called a Many Time Pad Attack.

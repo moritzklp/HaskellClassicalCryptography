@@ -9,6 +9,9 @@ cradle:
     - path: "./exec/Pad.lhs"
       component: "report:exe:myprogram"
 
+    - path: "./exec/Ceasar_chipher.lhs"
+      component: "report:exe:myprogram"
+
     - path: "./exec/Paths_report.hs"
       component: "report:exe:myprogram"
 
