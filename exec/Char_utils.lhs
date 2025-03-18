@@ -3,7 +3,7 @@ Module for char_utils analysis
 \begin{code}
 module Char_utils where
 
-import Data.Char (chr, ord)
+import Data.Char (chr)
 import Data.List (elemIndex, sortBy)
 import Data.Maybe (fromJust)
 import Data.Ord (comparing)
@@ -40,6 +40,7 @@ getCharFrequency xs = mergeResults $ map (\n -> map (getCharFrequency1 n) xs) le
 oneList :: [a] -> [b] -> [(a, b)]
 oneList []     _      = []
 oneList (x:xs) (y:ys) = (x, y) : oneList xs ys
+oneList (_:_) _ = []
 
 frequencyAnalysis :: [(Char, Int)] -> [(Char, Char)]
 frequencyAnalysis xs = 

@@ -28,6 +28,7 @@ padString s1 s2 = C.unpack $ xorBytes (C.pack s1) (C.pack s2)
 -- xor first bytestring with all the others
 xorCipherTexts :: [B.ByteString] -> [B.ByteString]
 xorCipherTexts (c:cx) = map (xorBytes c) cx
+xorCipherTexts [] = []
 
 
 -- main :: IO ()
