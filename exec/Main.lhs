@@ -1,5 +1,8 @@
 \section{One Time Pad}\label{sec:OTP}
 
+One Time Pad (OTP) is an encryption technique which relies on having a unique symmetric key for each encrypted message. We use a simple XOR operation on the plaintext and the key as the encyption function. In OTP the message must be of equal length or shorter than the key, or else it could not be completely encrypted or the key would have to loop. 
+This technique is proven to be unbreakable - the cipher is completely resistant to attacks.
+
 In this section we implement the main functionality of the One-Time Pad cipher. This implementation provides a command-line interface that allows users to generate keys, encrypt plaintext messages, and decrypt ciphertext back to the original text. The design emphasizes clarity and modularity, leveraging the helper functions from the \texttt{Pad} module.
 
 Key aspects of the implementation include:

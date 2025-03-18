@@ -1,4 +1,10 @@
 
+\section{Many Time Pad Attack}
+As previously stated, the One Time Pad is secure and resistant to attacks. However, in case where not all the keys are unique, so a key is reused, it is possible to break the encyption. The method to do it is called a Many Time Pad Attack.
+The cipher becomes vulnerable because if two plaintexts have been ecypted with the same key, performing the XOR operation on the cipher-texts will have the same result as doing it with the original plaintexts. What it means is that we remove the secret key from the equation completely. This is shown in the equation: [insert equation]
+
+
+
 \begin{code}
 module MTP where
 
@@ -7,6 +13,7 @@ import Data.Char (chr, ord)
 import Data.List (transpose, maximumBy)
 import Data.Ord (comparing)
 import System.Environment (getArgs)
+
 
 mtp :: IO ()
 mtp = do
