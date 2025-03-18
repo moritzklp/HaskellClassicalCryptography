@@ -26,6 +26,7 @@ Key aspects of the implementation include:
     \item \textbf{Random Key Generation:} By using Haskell's random number generator, the program creates a key consisting of uppercase letters, ensuring that each key is unpredictable and secure when used only once.
 \end{itemize}
 
+\subsection{Code}\label{sec:code}
 The following code block contains the complete implementation of the OTP functionality:
 
 \begin{code}
