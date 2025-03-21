@@ -1,0 +1,23 @@
+\subsection{Why Haskell}
+\label{sec:why_haskell}
+Haskell offers several advantages that make it a strong candidate fior implementing cryptographic attacks, such as the many-time-pad attack. These benefits include performance, memory safety, and a strong type system. They all contribute to writing secure and reliable (cryptographic code). 
+
+\paragraph{Compiled and Optimized Execution} Despite being a high-level functional language, Haskell can perform nearly as well as C. Research has shown that cryptographic functions implemented in Haskell can perform within the same order of magnitude as C, particularly when using compiler optimizations \cite{Ankner2013}. This proves that it can handle computationally intensive cryptographic tasks, with the correct optimizations.
+
+\paragraph{Lazy Evaluation} Haskell uses lazy evaluation, which means that it only computes the values when they are needed. This can help to improve the efficiency by avoiding unnecessary calculations. For our many-time pad attack this would help to handle large ciphertexts efficiently by processing them only when required. This also helps to reduce the memory usage and computation overhead.
+
+\paragraph{Memory Safety}
+Unlike languages like C, Haskell automatically manages the memory, preventing vulnerabilities such as buffer overflows and pointer-related bugs. This automatic memory management ensures that cryptographic operations do not suffer from unintended memory corruption. This is important in cryptographic applications because small memory errors can lead to security flaws. Research confirms that memory-safe programming languages significantly reduce security risks associated with manual memory management \cite{Dwivedi2021}. 
+
+\paragraph{Strong Type System}
+Haskell has a strong type system that ensures that variables hold only correct kinds of values. This prevents unintended operations, such as treating a byte array as a stringmisinterpreting cryptographic data formats. Programming on a type-level allows to encode security properties at compile time, which ensures that many classes of bugs are detected early.
+
+\paragraph{Immutability}
+Haskell's immutability ensures that once a value is assigned, it cannot be altered. This prevents unintended modifications of  cryptographic data during the execution, which can be a problem in other languages where variables can be overwritten accidentally. Since cryptographic attacks and defenses often rely on maintaining strict data integrity, immutability provides a significant security advantage.
+
+\paragraph{Arbitrary Precision Arithmetic}
+Haskell provides arbitrary precision integers, which means that it allows computations with arbitrary large numbers which prevents the overflow issues that are common in many other languages. This is useful in cryptographic application where calculations may involve large integers, and unexpected overflows could lead to incorrect results.
+
+\paragraph{Purity}
+Haskell's pure functions make sure that the same input always produces the same output, which makes computations easier to test and debug. The lack of hidden side effects simplifies formal reasoning about cryptographic operations, which is useful in security audits and verification processes \cite{Hughes1989}.
+
