@@ -1,5 +1,5 @@
 \begin{code}
-module Ceasar_chipher where
+module Ceasar_cipher where
 
 import System.IO
 import System.Random (randomR, newStdGen)
