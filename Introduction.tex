@@ -1,8 +1,20 @@
 \section{Introduction}
-Cryptography has long been a cornerstone of secure communication, and among its many techniques, the One-Time Pad (OTP) cipher holds a special place. When implemented correctly, the OTP offers perfect secrecy by using a truly random key that is as long as the message itself. However, this ideal is contingent on using each key only once. When a key is reused—a situation known as the Many-Time Pad—the cipher’s security can be compromised, revealing vulnerabilities that attackers may exploit.
+In this project, we explore fundamental principles of classical cryptography by implementing three historical ciphers: One-Time Pad (OTP), Caesar, and Vigenère. 
+Alongside implementing these encryption techniques, we also investigate their weaknesses and known cryptographic attacks. 
+Specifically, we focus on:
 
-In this project, we look into the classical principles of cryptography by implementing the OTP cipher and investigating its limitations. Our approach not only involves the encryption and decryption of natural language messages but also includes the generation of secure random keys and a demonstration of the Many-Time Pad attack. By exposing the weaknesses that arise from improper key management, we aim to provide a comprehensive understanding of the balance between theoretical security and practical implementation challenges.
+\begin{itemize}
+    \item Many-Time Pad (MTP) attacks on OTP, demonstrating how key reuse undermines its security.
+    \item Frequency analysis on the Caesar cipher (and monoalphabetic substitutions in general), 
+    showing how statistical patterns in natural language can reveal encrypted messages.
+    \item Kasiski examination (or a similar method) on Vigenère, 
+    which exploits repeating patterns in the ciphertext to determine the key length and ultimately decrypt the message.
+\end{itemize}
 
-Haskell has been chosen as the programming language for this project due to the course dependencies but also its pure functional nature, strong static type system, and emphasis on code safety. These features are particularly advantageous in the realm of cryptographic operations, where the avoidance of unintended side effects is critical. Through this implementation, we explore the viability and effectiveness of Haskell in developing secure cryptographic solutions, leveraging its capabilities to create a reliable and efficient cipher system.
+Our approach includes encrypting and decrypting natural language messages, generating secure random keys, 
+and implementing attacks to expose vulnerabilities in these ciphers. 
+By doing so, we aim to highlight the contrast between theoretical security (as in OTP) 
+and practical weaknesses (as in cases of poor key management and cipher design).
 
-The following sections outline our project’s objectives, methodologies, and the experimental setup used to analyze the performance and security of our Haskell-based OTP implementation.
+The following sections outline our project’s objectives, methodologies, and experimental setup, 
+detailing our implementation and security analysis in a Haskell-based environment.
