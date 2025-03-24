@@ -18,7 +18,6 @@ baseVal, range :: Int
 baseVal = ord baseChar
 range = 26
 
--- Core cipher functions ------------------------------------------------------
 shiftChar :: Int -> Char -> Char
 shiftChar s c
   | isAlpha c = let upperC = toUpper c
