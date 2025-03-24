@@ -1,5 +1,5 @@
 \begin{code}
-module Ceasar_cipher where
+module CaesarCipher where
 
 import System.IO
 import System.Random (randomR, newStdGen)
@@ -53,8 +53,8 @@ crackIO output inputFile = do
     writeFile output decrypted
     putStrLn $ "Guessed shift: " ++ show bestShift
 
-ceasar :: IO ()
-ceasar = do
+caesar :: IO ()
+caesar = do
     hSetBuffering stdin LineBuffering
     putStrLn "Hello, do you want to generate a key, encrypt, decrypt, or crack? (generate/encrypt/decrypt/crack)"
     method <- getLine

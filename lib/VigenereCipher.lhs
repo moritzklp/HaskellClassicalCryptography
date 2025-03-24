@@ -1,5 +1,5 @@
 \begin{code}
-module Vigenere_cipher where
+module VigenereCipher where
 
 import System.IO
 import Data.List (nub, sort, sortBy, groupBy, maximumBy, transpose, tails, minimumBy)

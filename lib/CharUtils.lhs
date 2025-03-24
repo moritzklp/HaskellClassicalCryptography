@@ -1,9 +1,7 @@
-Module for char_utils analysis
-
 \begin{code}
-module Char_utils where
+module CharUtils where
 
-import Data.Char (chr, ord)
+import Data.Char (chr)
 import Data.List (elemIndex)
 import Data.Maybe (fromJust)
 
