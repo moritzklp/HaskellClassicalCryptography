@@ -64,9 +64,10 @@ The function \texttt{decryptWithShift} then applies \texttt{shiftChar} across th
 shiftChar :: Int -> Char -> Char
 shiftChar shift c
   | not (isAlpha c) = c 
-  | otherwise = chr (base + mod (ord c - base - n) 26)
+  | otherwise = chr (base + mod (ord c - base - shift) 26)
   where
     base = if isUpper c then ord 'A' else ord 'a'
+
 
 -- Decrypt the text by applying a shift to each character
 decryptWithShift :: Int -> String -> String
@@ -90,8 +91,8 @@ getCaesarDecryptedText ciphertext =
   in decryptWithShift bestShift ciphertext
 
 -- Just for testing
-main :: IO ()
-main = do
+freq :: IO ()
+freq = do
     putStrLn "Enter the encrypted message:"
     encrypted <- getLine
     putStrLn "Decrypted message:"

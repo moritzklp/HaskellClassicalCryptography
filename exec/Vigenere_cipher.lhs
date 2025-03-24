@@ -3,25 +3,32 @@ module Vigenere_cipher where
 
 import System.IO
 import Data.List (nub, sort, sortBy, groupBy, maximumBy, transpose, tails, minimumBy)
-import Data.Char (ord, chr, isAlpha, toUpper)
+import Data.Char (ord, chr, isAlpha, toUpper, toLower)
 import Data.Ord (comparing)
 import Data.Function (on)
 import System.Random (randomRs, newStdGen)
 import qualified Data.Map as M 
+import Frequency (findBestShift, normalize, letterFrequencies, chiSquared, englishFrequencies)
+
 
 baseChar, endChar :: Char
-baseChar = '!'
-endChar = '~'
+baseChar = 'A'
+endChar = 'Z'
 baseVal, range :: Int
 baseVal = ord baseChar
-range = ord endChar - ord baseChar + 1
+range = 26
 
+-- Core cipher functions ------------------------------------------------------
 shiftChar :: Int -> Char -> Char
-shiftChar s c = chr $ baseVal + (ord c - baseVal + s) `mod` range
+shiftChar s c
+  | isAlpha c = let upperC = toUpper c
+                in chr $ baseVal + (ord upperC - baseVal + s) `mod` range
+  | otherwise = c
 
 vigenereEncrypt :: String -> String -> String
 vigenereEncrypt key plaintext =
-  zipWith (\k c -> shiftChar (ord k - baseVal) c) (cycle key) plaintext
+  let cleaned = map toUpper $ filter isAlpha plaintext
+  in zipWith (\k c -> shiftChar (ord k - baseVal) c) (cycle key) cleaned
 
 vigenereDecrypt :: String -> String -> String
 vigenereDecrypt key ciphertext =
@@ -84,21 +91,32 @@ guessKeyLength ctext =
       in if null distances then [3] else [mostCommonDivisor distances]
 
 guessShift :: String -> Int
-guessShift group =
-  let score shift = 
-        let decryptedGroup = map (shiftChar (-shift)) group
-        in sum [1 | c <- decryptedGroup, isAlpha c]
-      scoredShifts = [(shift, score shift) | shift <- [0..range-1]]
-  in fst $ maximumBy (comparing snd) scoredShifts
+guessShift column = 
+  findBestShift (map toLower column)  -- Frequency module expects lowercase
 
 crackVigenere :: String -> String
-crackVigenere ctext =
-  let keyLen = guessKeyLength ctext
-      columns = transpose [everyNth keyLen i ctext | i <- [0..keyLen-1]]
-      shifts = map guessShift columns
-  in map (\s -> chr (baseVal + s)) shifts
+crackVigenere ciphertext =
+  let
+      cleanText = map toUpper (filter isAlpha ciphertext)
+      -- Guess key length
+      keyLen = guessKeyLength cleanText
+      -- Split into columns
+      columns = [ everyNth keyLen i cleanText | i <- [0..keyLen-1] ]
+      -- Find best shift for each column
+      shifts = map (findBestShift . map toLower) columns  -- Frequency expects lowercase
+      -- Convert shifts to key
+      key = map shiftToKey shifts
+  in key
   where
-    everyNth n k = map head . takeWhile (not.null) . iterate (drop n) . drop k
+    everyNth n k xs = map head $ takeWhile (not . null) $ iterate (drop n) (drop k xs)
+    shiftToKey shift = chr (ord 'A' + shift)
+
+shiftToKey :: Int -> Char
+shiftToKey shift = chr (ord 'A' + shift)
+
+normalize :: String -> String
+normalize = map toLower . filter isAlpha
+
 
 -- IO Operations --------------------------------------------------------------
 generateVigenereKeyIO :: Int -> IO String
@@ -109,10 +127,12 @@ crackIO :: String -> String -> IO ()
 crackIO output inputFile = do
     ciphertext <- readFile inputFile
     let guessedKey = crackVigenere ciphertext
+        guessedKeyLen = length guessedKey
         plaintext = vigenereDecrypt guessedKey ciphertext
     writeFile output plaintext
     putStrLn $ "Guessed key: " ++ guessedKey
-    
+    putStrLn $ "Guessed key length: " ++ show guessedKeyLen
+
 encryptIO :: String -> String -> String -> IO ()
 encryptIO output inputFile keyFile = do
     inputContent <- readFile inputFile
@@ -129,7 +149,7 @@ decryptIO output inputFile keyFile = do
 vig :: IO ()
 vig = do
     hSetBuffering stdin LineBuffering
-    putStrLn "Hello, do you want to generate a key, encrypt, or decrypt? (generate/encrypt/decrypt)"
+    putStrLn "Hello, do you want to generate a key, encrypt, decrypt, or crack? (generate/encrypt/decrypt/crack)"
     method <- getLine
     case method of
         "generate" -> do
@@ -139,6 +159,7 @@ vig = do
             keyLength <- read <$> getLine
             key <- generateVigenereKeyIO keyLength
             writeFile keyFile key
+
         "encrypt" -> do
             putStrLn "In what file do you want to store the ciphertext? (e.g., output.txt)"
             outputFile <- getLine
@@ -147,6 +168,7 @@ vig = do
             putStrLn "What key do you want to use? (e.g., key.txt)"
             keyFile <- getLine
             encryptIO outputFile inputFile keyFile
+
         "decrypt" -> do
             putStrLn "In what file do you want to store the plaintext? (e.g., output.txt)"
             outputFile <- getLine
@@ -155,10 +177,14 @@ vig = do
             putStrLn "What key do you want to use? (e.g., key.txt)"
             keyFile <- getLine
             decryptIO outputFile inputFile keyFile
-        _ -> putStrLn "Invalid method. Please choose 'generate', 'encrypt', or 'decrypt'."
 
+        "crack" -> do
+            putStrLn "Where should the decrypted text be saved? (e.g., output.txt)"
+            outputFile <- getLine
+            putStrLn "What ciphertext file should be cracked? (e.g., cipher.txt)"
+            inputFile <- getLine
+            crackIO outputFile inputFile
 
-vig2 = do
-  ctext <- readFile "output_vig.txt"
-  putStrLn $ "Estimated key length: " ++ show (guessKeyLength ctext)
+        _ -> putStrLn "Invalid method. Please choose 'generate', 'encrypt', 'decrypt', or 'crack'."
+
 \end{code}
