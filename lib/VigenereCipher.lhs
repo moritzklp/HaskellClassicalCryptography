@@ -148,7 +148,7 @@ decryptIO output inputFile keyFile = do
 vig :: IO ()
 vig = do
     hSetBuffering stdin LineBuffering
-    putStrLn "Hello, do you want to generate a key, encrypt, decrypt, or crack? (generate/encrypt/decrypt/crack)"
+    putStrLn "[Vigenere] Do you want to generate a key, encrypt, decrypt, or crack? (generate/encrypt/decrypt/crack)"
     method <- getLine
     case method of
         "generate" -> do
