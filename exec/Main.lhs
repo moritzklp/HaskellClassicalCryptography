@@ -7,11 +7,22 @@ We will now use the library form Section \ref{sec:Basics} in a program.
 module Main where
 
 import OTP
+import VigenereCipher
+import CaesarCipher
 
 main :: IO ()
 main = do
   putStrLn "Hello!"
-  otp
+  putStrLn "Do you want to do One Time Pad (OTP), Vigenere Cipher or Caesar Cipher? (o/v/c)"
+  method <- getLine
+  case method of
+    "o" -> do
+      otp
+    "v" -> do
+      vig
+    "c" -> do
+      caesar
+    _ -> putStrLn "Invalid method"
   putStrLn "GoodBye"
 \end{code}
 
