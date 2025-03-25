@@ -3,7 +3,7 @@ module CaesarCipher where
 
 import System.IO
 import System.Random (randomR, newStdGen)
-import Data.Char (ord, chr, isAlpha, toUpper, toLower)
+import Data.Char (isAlpha, toUpper, toLower)
 import Frequency (findBestShift)
 
 caesarEncrypt :: Int -> String -> String

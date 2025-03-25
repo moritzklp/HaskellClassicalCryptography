@@ -53,7 +53,7 @@ In the next part we compare the observed frequencies (from a decrypted candidate
 -- 'zip' pairs each observed frequency with its corresponding expected frequency - lets us compare the same letter's frequency from both lists
 chiSquared :: [(Char, Double)] -> [(Char, Double)] -> Double
 chiSquared observed expected =
-  sum [((o - e) ^ 2) / e | ((_, o), (_, e)) <- zip observed expected]
+  sum [((o - e) ** 2) / e | ((_, o), (_, e)) <- zip observed expected]
 \end{code}
 
 In \texttt{shiftChar} we handle the rotation of a single alphabetic character by a specified amount, wrapping around the alphabet if necessary. This function first checks whether the character is alphabetic; if it is, it calculates its position (0–25) by subtracting the base ASCII value for uppercase or lowercase letters. It then subtracts the shift amount, applies a modulo 26 to ensure the value wraps around properly, and adds the base back to convert it back to a valid ASCII character. Non-alphabetical characters are returned unchanged. 

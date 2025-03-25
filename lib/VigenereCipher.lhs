@@ -2,13 +2,13 @@
 module VigenereCipher where
 
 import System.IO
-import Data.List (nub, sort, sortBy, groupBy, maximumBy, transpose, tails, minimumBy)
+import Data.List (nub, sort, sortBy, groupBy, maximumBy, tails, minimumBy)
 import Data.Char (ord, chr, isAlpha, toUpper, toLower)
 import Data.Ord (comparing)
 import Data.Function (on)
 import System.Random (randomRs, newStdGen)
 import qualified Data.Map as M 
-import Frequency (findBestShift, normalize, letterFrequencies, chiSquared, englishFrequencies)
+import Frequency (findBestShift)
 
 
 baseChar, endChar :: Char
@@ -84,14 +84,17 @@ guessKeyLength ctext =
       scores = [(kl, abs (friedmanTest ctext kl - 0.0667)) | kl <- allCandidates]
   in fst $ minimumBy (comparing snd) scores
   where
-    kasiskiMethod ctext = 
-      let sequences = findRepeatedSequences 3 ctext
+    kasiskiMethod ct =
+      let sequences = findRepeatedSequences 3 ct
           distances = calculateDistances sequences
       in if null distances then [3] else [mostCommonDivisor distances]
 
 guessShift :: String -> Int
 guessShift column = 
   findBestShift (map toLower column)  -- Frequency module expects lowercase
+
+shiftToKey :: Int -> Char
+shiftToKey shift = chr (ord 'A' + shift)
 
 crackVigenere :: String -> String
 crackVigenere ciphertext =
@@ -108,10 +111,6 @@ crackVigenere ciphertext =
   in key
   where
     everyNth n k xs = map head $ takeWhile (not . null) $ iterate (drop n) (drop k xs)
-    shiftToKey shift = chr (ord 'A' + shift)
-
-shiftToKey :: Int -> Char
-shiftToKey shift = chr (ord 'A' + shift)
 
 normalize :: String -> String
 normalize = map toLower . filter isAlpha
