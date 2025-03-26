@@ -46,10 +46,11 @@ letterFrequencies :: String -> [(Char, Double)]
 letterFrequencies text = [(c, charFrequency c text) | c <- ['a'..'z']]
 \end{code}
 
-In the next part we compare the observed frequencies (from a decrypted candidate) with the expected English frequencies. The lower the chi-squared value, the closer the candidate is to what is typical in English.
+In the next part, we compare the observed frequencies (from a decrypted candidate) with the expected letter frequencies in standard English. This comparison helps us evaluate how ``English-like'' the decrypted text is. 
+The method we use is based on the \textit{chi-squared statistic}, a technique often used in statistical hypothesis testing. The lower the chi-squared value, the closer the candidate is to what is typical in English.\footnote{Idea adapted from \url{http://practicalcryptography.com/cryptanalysis/text-characterisation/chi-squared-statistic/}.}
 
 \begin{code}
--- | Calculate the chi-squared statistic between the observed and expected frequencies (idea from http://practicalcryptography.com/cryptanalysis/text-characterisation/chi-squared-statistic/)
+-- | Calculate the chi-squared statistic between the observed and expected frequencies
 -- | 'zip' pairs each observed frequency with its corresponding expected frequency - lets us compare the same letter's frequency from both lists
 chiSquared :: [(Char, Double)] -> [(Char, Double)] -> Double
 chiSquared observed expected =
