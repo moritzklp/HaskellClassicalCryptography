@@ -119,6 +119,7 @@ crackIO output inputFile = do
         decrypted = caesarDecrypt bestShift (map toUpper ciphertext)
     writeFile output decrypted
     putStrLn $ "Guessed shift: " ++ show bestShift
+    putStrLn $ "Guessed text: " ++ show decrypted
 \end{code}
 
 \subsubsection{User Interface}
