@@ -72,13 +72,26 @@ The functions \texttt{vigenereEncrypt} and \texttt{vigenereDecrypt} perform the 
 
 \begin{code}
 vigenereEncrypt :: String -> String -> String
-vigenereEncrypt key plaintext =
-  let cleaned = map toUpper $ filter isAlpha plaintext
-  in zipWith (\k c -> shiftChar (ord k - baseVal) c) (cycle key) cleaned
+vigenereEncrypt key plaintext
+  | null key  = error "Empty key not allowed"
+  | otherwise = encrypt plaintext (cycle key)
+  where
+    encrypt [] _ = []
+    encrypt (_:_) [] = error "Unexpected empty key during encryption"
+    encrypt (c:cs) ks@(k:ks')
+      | isAlpha c = shiftChar (ord (toUpper k) - baseVal) (toUpper c) : encrypt cs ks'
+      | otherwise = c : encrypt cs ks
 
 vigenereDecrypt :: String -> String -> String
-vigenereDecrypt key ciphertext =
-  zipWith (\k c -> shiftChar (- (ord k - baseVal)) c) (cycle key) ciphertext
+vigenereDecrypt key ciphertext
+  | null key  = error "Empty key not allowed"
+  | otherwise = decrypt ciphertext (cycle key)
+  where
+    decrypt [] _ = []
+    decrypt (_:_) [] = error "Unexpected empty key during decryption"
+    decrypt (c:cs) ks@(k:ks')
+      | isAlpha c = shiftChar (- (ord (toUpper k) - baseVal)) c : decrypt cs ks'
+      | otherwise = c : decrypt cs ks
 \end{code}
 
 \subsubsection{Finding Repeated Sequences and Calculating Distances}
@@ -131,7 +144,7 @@ These functions employ statistical measures to refine the key length estimation 
 \paragraph{Theory:}
 \begin{itemize}
   \item \textbf{Index of Coincidence (IC):}  
-  The IC is a measure of the probability that two randomly selected letters from a text are the same. For a language like English, the IC is typically around 0.0667. A lower IC indicates a more uniform distribution of letters, as seen in well-encrypted text, while a higher IC suggests a distribution similar to natural language.
+  The IC is a measure of the probability that two randomly selected letters from a text are the same. For a language like English, the IC is typically around 0.067. A lower IC indicates a more uniform distribution of letters, as seen in well-encrypted text, while a higher IC suggests a distribution similar to natural language.
   \item \textbf{Friedman Test:}  
   This test calculates the IC for columns of ciphertext. When the ciphertext is divided based on a guessed key length, each column ideally represents text encrypted with the same Caesar shift. The average IC of these columns is then compared to the expected value for the language. A key length that yields an average IC close to the expected value is more likely to be correct.
   \item \textbf{Combining Methods:}  
@@ -154,7 +167,7 @@ These functions employ statistical measures to refine the key length estimation 
   This function synthesizes the candidate key lengths from both the Kasiski examination and a range of possible lengths evaluated via the Friedman test:
   \begin{enumerate}
     \item It first obtains candidates from the Kasiski method by analyzing repeated sequences and calculating their most common divisor.
-    \item It then tests a range of key lengths (e.g., 1 through 20) using the Friedman test, computing a score based on the deviation of the average IC from the expected 0.0667.
+    \item It then tests a range of key lengths (e.g., 1 through 20) using the Friedman test, computing a score based on the deviation of the average IC from the expected 0.067.
     \item The key length with the smallest deviation (i.e., the score closest to the expected value) is selected as the best guess.
   \end{enumerate}
 \end{itemize}
@@ -181,7 +194,7 @@ guessKeyLength ctext =
   let kasiskiCandidates = take 3 $ kasiskiMethod ctext
       friedmanCandidates = [1..20]
       allCandidates = nub (kasiskiCandidates ++ friedmanCandidates)
-      scores = [(kl, abs (friedmanTest ctext kl - 0.0667)) | kl <- allCandidates]
+      scores = [(kl, abs (friedmanTest ctext kl - 0.067)) | kl <- allCandidates]
   in fst $ minimumBy (comparing snd) scores
   where
     kasiskiMethod ct =
