@@ -31,15 +31,6 @@ executables:
       - report
 
 tests:
-  simpletests:
-    main: simpletests.lhs
-    source-dirs: test
-    dependencies:
-      - report
-      - QuickCheck
-      - hspec
-
-tests:
   alltests:
     main: Main.lhs
     source-dirs: test

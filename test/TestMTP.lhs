@@ -42,7 +42,7 @@ spec = do
       -- | Ensure we recovered some known characters (not just dots)
       decrypted `shouldSatisfy` any (`elem` ['A'..'Z'])
 
-    it "Recovers at least 50% from first ciphertext (no correctness check)" $ do
+    it "Recovers at least 75% from first ciphertext (no correctness check)" $ do
       let ciphertexts = map hexToBytes sampleHexes
           (aligned, target) = normalizeToFirst ciphertexts
           cWithSpaces = analyzeAllCiphertexts aligned
@@ -52,5 +52,23 @@ spec = do
           known = length (filter (/= '.') decrypted)
           total = length decrypted
           ratio = (fromIntegral known / fromIntegral total) :: Double
-      ratio `shouldSatisfy` (> 0.5)
+      ratio `shouldSatisfy` (> 0.75)
+
+    it "Correctly guesses at least 75% of the characters compared to known plaintext (Albert Einstein Quote)" $ do
+      let ciphertexts = map hexToBytes sampleHexes
+          (aligned, target) = normalizeToFirst ciphertexts
+          cWithSpaces = analyzeAllCiphertexts aligned
+          emptyKey = replicate (BS.length target) Nothing
+          partialKey = createPartialKey emptyKey cWithSpaces
+          decrypted = breakWithPartialKey (BS.unpack target) partialKey
+
+          -- | Expected plaintext based on known Einstein quote
+          expected = "Intellectuals solve problems; geniuses prevent them.   \
+          \Two things are infinite: the universe and human stupidity; and I'm not sure about the universe. - Albert"
+
+          -- | Compare each character and count how many are correct
+          correctMatches = length $ filter id $ zipWith (==) decrypted expected
+          total = min (length decrypted) (length expected)
+          accuracy = fromIntegral correctMatches / fromIntegral total :: Double
+      accuracy `shouldSatisfy` (> 0.75) 
 \end{code}
