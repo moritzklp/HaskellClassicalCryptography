@@ -38,3 +38,12 @@ tests:
       - report
       - QuickCheck
       - hspec
+
+tests:
+  alltests:
+    main: Main.lhs
+    source-dirs: test
+    dependencies:
+      - report
+      - hspec
+      - QuickCheck
