@@ -260,6 +260,7 @@ crackIO output inputFile = do
     writeFile output plaintext
     putStrLn $ "Guessed key: " ++ guessedKey
     putStrLn $ "Guessed key length: " ++ show guessedKeyLen
+    putStrLn $ "Guessed plaintext: " ++ plaintext
 
 encryptIO :: String -> String -> String -> IO ()
 encryptIO output inputFile keyFile = do
