@@ -1,1 +1,1 @@
-This is a test input for cipher stuff. I hate cryptography and have no idea what I am doing. :((((
+Haskell is a computer programming language. In particular, it is a polymorphically statically typed, lazy, purely functional language, quite different from most other programming languages.
