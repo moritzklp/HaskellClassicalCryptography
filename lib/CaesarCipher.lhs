@@ -118,6 +118,7 @@ crackIO output inputFile = do
     let bestShift = findBestShift (map toLower ciphertext)
         decrypted = caesarDecrypt bestShift (map toUpper ciphertext)
     writeFile output decrypted
+    putStrLn $ "Ciphertext: " ++ show ciphertext
     putStrLn $ "Guessed shift: " ++ show bestShift
     putStrLn $ "Guessed text: " ++ show decrypted
 \end{code}

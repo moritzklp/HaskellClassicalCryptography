@@ -271,6 +271,7 @@ crackIO output inputFile = do
         guessedKeyLen = length guessedKey
         plaintext = vigenereDecrypt guessedKey ciphertext
     writeFile output plaintext
+    putStrLn $ "Ciphertext: " ++ ciphertext
     putStrLn $ "Guessed key: " ++ guessedKey
     putStrLn $ "Guessed key length: " ++ show guessedKeyLen
     putStrLn $ "Guessed plaintext: " ++ plaintext
