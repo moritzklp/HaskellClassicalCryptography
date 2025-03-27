@@ -64,20 +64,20 @@ loadHexList filePath = do
 splitHexStrings :: BS.ByteString -> [String]
 splitHexStrings = map C8.unpack . C8.split ','
 
--- Process and decrypt a single ciphertext using information from all ciphertexts
+-- | Process and decrypt a single ciphertext using information from all ciphertexts
 breakIO :: [BS.ByteString] -> BS.ByteString -> IO ()
 breakIO allCiphertexts targetCiphertext = do
-    -- Make all ciphertexts the same length as the target ciphertext
+    -- | Make all ciphertexts the same length as the target ciphertext
     let normalizedCiphertexts = map (BS.take (BS.length targetCiphertext)) allCiphertexts
 
-    -- Find space positions for all ciphertexts
+    -- | Find space positions for all ciphertexts
     let ciphertextsWithSpaceInfo = analyzeAllCiphertexts normalizedCiphertexts
 
-    -- Initialize empty key and update it with space information
+    -- | Initialize empty key and update it with space information
     let emptyKey = replicate (fromIntegral $ BS.length targetCiphertext) Nothing
     let partialKey = createPartialKey emptyKey ciphertextsWithSpaceInfo
 
-    -- Decrypt the target ciphertext
+    -- | Decrypt the target ciphertext
     putStrLn $ breakWithPartialKey (BS.unpack targetCiphertext) partialKey
 \end{code}
 
