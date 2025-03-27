@@ -20,7 +20,7 @@ englishFrequencies = [('a', 8.2), ('b', 1.5), ('c', 2.8), ('d', 4.3), ('e', 12.7
 
 Next, we filter the text to keep only the alphabetic characters and convert them to lowercase. This ensures that the frequency analysis is case-insensitive and not affected by non-alphabetic characters.
 The \texttt{normalize} function removes any non-alphabetical characters and converts the remaining ones to lowercase. This is very important for analysing how often words appear in a text.
-The \textttt{charFrequency} function then calculates how often a specific character appears in the text (after normalization) in relation to the total number of letters.
+The \texttt{charFrequency} function then calculates how often a specific character appears in the text (after normalization) in relation to the total number of letters.
 The \texttt{letterFrequencies} function builds a list of tuples for every letter from 'a' to 'z', each paired with its computed frequency in the text.
 
 \begin{code}

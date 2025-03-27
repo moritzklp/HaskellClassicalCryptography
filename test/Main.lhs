@@ -18,7 +18,7 @@ main :: IO ()
 main = hspec $ do
   describe "Caesar Cipher Tests" TestCaesar.spec
   describe "Frequency Analysis Tests" TestFrequency.spec
-  describe "Vigenère Cipher Tests" TestVigenere.spec
+  describe "Vigenere Cipher Tests" TestVigenere.spec
   describe "OTP Tests" TestOTP.spec
   describe "MTP Tests" TestMTP.spec
   describe "Pad (XOR Helper) Tests" TestPad.spec
