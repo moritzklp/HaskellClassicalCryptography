@@ -1,7 +1,7 @@
 
-\section{Caesar Cipher Frequency Analysis}
+\section{Frequency Analysis}
 The idea here is to exploit the fact that in English (and most other natural languages), certain letters appear with predictable frequencies. For example, the letter 'e' is the most common letter in English text, followed by 't', 'a', 'o', etc.
-In the code we define an expected frequency distribution for English letters (from Wikipedia). 
+In the code we define an expected frequency distribution for English letters \footnote{\url{https://en.wikipedia.org/wiki/Letter_frequency}}. 
 
 \begin{code}
 module Frequency where

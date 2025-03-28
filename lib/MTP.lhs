@@ -32,7 +32,7 @@ Therefore, if a space is XOR-ed with a letter, the result is another letter.
 If two ciphertexts are XOR-ed, and a letter is found in the result,
 it means that one of the plaintexts had a space in that position.
 
-\subsection{Many-Time Pad Implementation}\label{sec:otp_user_interaction}
+\subsection*{Many-Time Pad Implementation}\label{sec:otp_user_interaction}
 
 \begin{code}
 module MTP where

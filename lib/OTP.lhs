@@ -23,7 +23,7 @@ import Pad
 import MTP
 \end{code}
 
-\subsection{Encryption and Decryption}\label{sec:otp_user_interaction}
+\subsection*{Encryption and Decryption}\label{sec:otp_user_interaction}
 
 Encryption and decryption is handled by the \texttt{encryptIO} and \texttt{decryptIO} functions, respectively.
 These functions read the input and key files, perform the encryption or decryption, and write the result to the output file.
@@ -47,7 +47,7 @@ decryptIO outputFile inputFile keyFile = do
     writeFile outputFile plaintext
 \end{code}
 
-\subsection{Key Generation}\label{sec:otp_key_generation}
+\subsection*{Key Generation}\label{sec:otp_key_generation}
 
 The key used to encrypt the plaintext must be as long as the plaintext itself.
 Therefore the key generation functions ensure that the key length matches the length of the input plaintext.
@@ -68,7 +68,7 @@ generateKeyFromPlaintextIO inputFile keyFile = do
 \end{code}
 
 
-\subsection{User Interaction}\label{sec:otp_user_interaction}
+\subsection*{User Interaction}\label{sec:otp_user_interaction}
 
 The \texttt{main} function provides a command-line interface for the user to select the desired operation: 
 key generation, encryption, decryption, or a demonstration of the Multi-Time Pad (MTP) attack.

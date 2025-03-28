@@ -1,4 +1,5 @@
-\section{Helper Functions}\label{sec:helper-functions}
+\section{Helper Functions}
+\label{sec:helper-functions}
 
 In this section we define functions that are essential for our implementation of the OTP cipher.
 The code below shows our Haskell implementation, which includes a function to perform the bitwise XOR operation on two byte strings. 

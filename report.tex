@@ -11,7 +11,7 @@
 \maketitle
 
 \begin{abstract}
-
+    This project presents a comprehensive exploration of classical cryptographic techniques using Haskell. It covers the design, implementation, and analysis of three historical ciphers: the Caesar cipher, the Vigenère cipher, and the One-Time Pad (OTP). The report details the development of haskell functions for encryption and decryption, employing frequency analysis and statistical methods to crack ciphers and expose vulnerabilities, such as the Many-Time Pad attack on OTP. By leveraging Haskell’s strong type system, lazy evaluation, and performance optimizations, the project illustrates both the theoretical security and practical limitations of these cryptographic systems.
 \end{abstract}
 
 \vfill
@@ -27,23 +27,21 @@
 
 \input{whyHaskell.tex}
 
-\input{lib/OTP.lhs}
-
 \input{lib/Pad.lhs}
 
-\input{exec/Main.lhs}
-
-\input{lib/MTP.lhs}
+\input{lib/Frequency.lhs}
 
 \input{lib/CaesarCipher.lhs}
 
 \input{lib/VigenereCipher.lhs}
 
-\input{lib/Frequency.lhs}
+\input{lib/OTP.lhs}
 
-\input{test/Main.lhs}
+\input{lib/MTP.lhs}
 
-%\input{Conclusion.tex}
+\input{exec/Main.lhs}
+
+\input{Conclusion.tex}
 
 \newpage
 

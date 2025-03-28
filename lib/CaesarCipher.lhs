@@ -1,21 +1,11 @@
 \section{Caesar Cipher}
 A Caesar cipher is a classical substitution cipher where each letter in the plaintext is replaced by a letter a fixed number of positions down the alphabet. For instance, with a shift of 3, the letter A is replaced by D, B by E, and so on. Despite its simplicity and vulnerability to frequency analysis, the Caesar cipher is a fundamental example in the study of cryptography.
 
-\subsection{Overview of the Implementation}
-The module provides functionality for:
-\begin{itemize}
-    \item Encrypting text with a given shift.
-    \item Decrypting text using the inverse of the encryption shift.
-    \item Generating a random key (shift) for the cipher.
-    \item Cracking the cipher using frequency analysis.
-    \item Handling input/output operations to interact with files.
-\end{itemize}
+The module provides functionality for \textit{encrypting}, \textit{decrypting}, \textit{generating keys}, and \textit{cracking} Caesar ciphers.
 
 The code is structured into several functions, each addressing a specific aspect of the cipher operations.
 
-\subsection{Code Explanation}
-The code is organized into the following sections:
-\subsubsection{Module and Imports}
+\subsection*{Module and Imports}
 The module starts by declaring its name and importing necessary libraries:
 \begin{itemize}
     \item \texttt{System.IO} for input/output operations.
@@ -33,7 +23,7 @@ import Data.Char (isAlpha, toUpper, toLower)
 import Frequency (findBestShift)
 \end{code}
 
-\subsubsection{Encryption and Decryption Functions}
+\subsection*{Encryption and Decryption Functions}
 The \texttt{caesarEncrypt} function takes an integer shift and a string, applying the shift to each alphabetical character. It:
 \begin{itemize}
     \item Converts the character to uppercase.
@@ -60,7 +50,7 @@ caesarDecrypt :: Int -> String -> String
 caesarDecrypt shift = caesarEncrypt (-shift)
 \end{code}
 
-\subsubsection{I/O Functions for Encryption and Decryption}
+\subsection*{I/O Functions for Encryption and Decryption}
 The functions \texttt{encryptIO} and \texttt{decryptIO} handle file operations:
 \begin{itemize}
     \item They read the input text and key from files.
@@ -85,7 +75,7 @@ decryptIO output inputFile keyFile = do
     writeFile output (caesarDecrypt shift (map toUpper inputContent))
 \end{code}
 
-\subsubsection{Key Generation Functions}
+\subsection*{Key Generation Functions}
 The function \texttt{generateCaesarKeyIO} generates a random shift between 1 and 25 using a random number generator. The function \texttt{generateKeyFromPlaintextIO} then uses this key to create a key file for a given plaintext file, even though the plaintext is not directly used in generating the key.
 
 \begin{code}
@@ -102,7 +92,7 @@ generateKeyFromPlaintextIO inputFile keyfile = do
     writeFile keyfile key
 \end{code}
 
-\subsubsection{Cracking the Cipher}
+\subsection*{Cracking the Cipher}
 The \texttt{crackIO} function attempts to decrypt a ciphertext without a known key by:
 \begin{itemize}
     \item Reading the ciphertext from a file.
@@ -123,13 +113,8 @@ crackIO output inputFile = do
     putStrLn $ "Guessed text: " ++ show decrypted
 \end{code}
 
-\subsubsection{User Interface}
-The \texttt{caesar} function provides a simple command-line interface that:
-\begin{itemize}
-    \item Prompts the user to choose an action: generate a key, encrypt, decrypt, or crack.
-    \item Reads the necessary file names from the user.
-    \item Calls the appropriate function based on the user's input.
-\end{itemize}
+\subsection*{User Interface}
+The \texttt{caesar} function provides a simple command-line interface that promts the user to choose an action (generate, encrypt, decrypt, or crack) and then reads the necessary file names. It then calls the appropriate function based on the user's input.
 
 \begin{code}
 caesar :: IO ()

@@ -1,29 +1,9 @@
 \section{Vigenère Cipher}
 The Vigenère cipher is a polyalphabetic substitution cipher that encrypts alphabetic text by using a sequence of Caesar ciphers based on the letters of a keyword. Each letter of the key determines a shift for the corresponding character in the plaintext. Unlike the simple Caesar cipher, which uses one fixed shift, the Vigenère cipher employs multiple shifts determined by the key, making it more resilient against basic frequency analysis. However, methods like the Kasiski examination and the Friedman test can still be used to analyze and break it.
 
-\subsection{Theory Behind the Vigenère Cipher}
-In the Vigenère cipher:
-\begin{itemize}
-    \item A key (a string of letters) is used to determine a series of shifts. Each letter in the key corresponds to a shift value (e.g., A $\to$ 0, B $\to$ 1, ..., Z $\to$ 25).
-    \item The plaintext is first cleaned (usually by removing non-alphabetic characters and converting to a common case) and then encrypted by shifting each letter according to the corresponding key letter, repeating (cycling) the key as needed.
-    \item Decryption involves reversing the process by shifting the ciphertext in the opposite direction.
-\end{itemize}
-The strength of the cipher lies in the length and randomness of the key. Short or repetitive keys are vulnerable to statistical attacks such as the Kasiski examination, which looks for repeated sequences in the ciphertext, and the Friedman test, which uses the index of coincidence to estimate the key length.
+This Haskell module implements the Vigenère cipher and includes functions for encryption, decryption, key generation, and cipher cracking. The code is structured into several functions, each addressing a specific aspect of the cipher operations.
 
-\subsection{Overview of the Implementation}
-This Haskell module implements the Vigenère cipher and includes:
-\begin{itemize}
-    \item Functions for encrypting and decrypting text using a given key.
-    \item Utility functions for character manipulation and shifting.
-    \item Techniques to analyze ciphertext, such as finding repeated sequences and calculating distances, which aid in estimating the key length.
-    \item Frequency analysis to guess the key by examining individual columns of ciphertext.
-    \item I/O operations to handle file input and output for encryption, decryption, key generation, and cipher cracking.
-\end{itemize}
-
-\subsection{Code Explanation}
-Below is the complete code with detailed comments.
-
-\subsubsection{Module Declaration and Imports}
+\subsection*{Module Declaration and Imports}
 The module is named \texttt{VigenereCipher} and imports several libraries:
 \begin{itemize}
     \item \texttt{System.IO} for file I/O.
@@ -45,7 +25,7 @@ import qualified Data.Map as M
 import Frequency (findBestShift)
 \end{code}
 
-\subsubsection{Utility Functions and Constants}
+\subsection*{Utility Functions and Constants}
 Constants such as \texttt{baseChar} and \texttt{endChar} define the range of uppercase letters. The function \texttt{shiftChar} applies a shift to a character, wrapping around if necessary.
 
 \begin{code}
@@ -63,7 +43,7 @@ shiftChar s c
   | otherwise = c
 \end{code}
 
-\subsubsection{Encryption and Decryption}
+\subsection*{Encryption and Decryption}
 The functions \texttt{vigenereEncrypt} and \texttt{vigenereDecrypt} perform the core operations:
 \begin{itemize}
     \item \textbf{Encryption:} The plaintext is first cleaned (non-alphabetic characters removed and converted to uppercase). The encryption is achieved by cycling through the key and shifting each character by the value corresponding to the key letter.
@@ -94,8 +74,8 @@ vigenereDecrypt key ciphertext
       | otherwise = c : decrypt cs ks
 \end{code}
 
-\subsubsection{Finding Repeated Sequences and Calculating Distances}
-These functions implement the Kasiski examination, a classical method for breaking polyalphabetic ciphers such as the Vigenère cipher by exploiting repeated sequences in the ciphertext.
+\subsection*{Finding Repeated Sequences and Calculating Distances}
+These functions implement the Kasiski examination \cite{Kasinski63}, a classical method for breaking polyalphabetic ciphers such as the Vigenère cipher by exploiting repeated sequences in the ciphertext.
 
 \paragraph{Theory:}
 \begin{itemize}
@@ -139,17 +119,17 @@ calculateDistances = concatMap (\(_, positions) ->
 
 \end{code}
 
-\subsubsection{Frequency Analysis and Key Length Estimation}
+\subsection*{Frequency Analysis and Key Length Estimation}
 These functions employ statistical measures to refine the key length estimation and further assist in breaking the cipher.
 
 \paragraph{Theory:}
 \begin{itemize}
   \item \textbf{Index of Coincidence (IC):}  
   The IC is a measure of the probability that two randomly selected letters from a text are the same. For a language like English, the IC is typically around 0.067. A lower IC indicates a more uniform distribution of letters, as seen in well-encrypted text, while a higher IC suggests a distribution similar to natural language.
-  \item \textbf{Friedman Test:}  
+  \item \textbf{Friedman Test \cite{friedman1922}:}  
   This test calculates the IC for columns of ciphertext. When the ciphertext is divided based on a guessed key length, each column ideally represents text encrypted with the same Caesar shift. The average IC of these columns is then compared to the expected value for the language. A key length that yields an average IC close to the expected value is more likely to be correct.
   \item \textbf{Combining Methods:}  
-  By merging the insights from the Kasiski examination (which provides concrete candidate key lengths from repeated patterns) and the Friedman test (which statistically evaluates each candidate's plausibility), one can robustly guess the key length.
+  By merging the insights from the Kasiski examination (which provides concrete candidate key lengths from repeated patterns) and the Friedman test (which statistically evaluates each candidate's plausibility), we can robustly guess the key length.
 \end{itemize}
 
 \paragraph{Implementation Details:}
@@ -214,18 +194,11 @@ mostCommonDivisor distances =
                      let count = length (d:ds)]
 \end{code}
 
-\subsubsection{Key Guessing and Cracking the Cipher}
+\subsection*{Key Guessing and Cracking the Cipher}
 To crack the Vigenère cipher:
 \begin{itemize}
     \item \texttt{guessShift} determines the most likely Caesar shift for a given column of ciphertext using frequency analysis.
-    \item \texttt{crackVigenere}:
-    \begin{enumerate}
-      \item Normalizes the ciphertext.
-      \item Estimates the key length using the methods described above.
-      \item Splits the ciphertext into columns corresponding to each key character.
-      \item Determines the best shift for each column.
-      \item Reconstructs the key from these shifts.
-    \end{enumerate}
+    \item \texttt{crackVigenere} normalizes the ciphertext, estimates the key length (using the methods described above), and then reconstructs the key by determining the best shift for each column.
 \end{itemize}
 
 \begin{code}
@@ -252,7 +225,7 @@ normalize :: String -> String
 normalize = map toLower . filter isAlpha
 \end{code}
 
-\subsubsection{I/O Operations}
+\subsection*{I/O Operations}
 The module includes functions for file input and output:
 \begin{itemize}
     \item \texttt{generateVigenereKeyIO} creates a random key of a specified length.
@@ -291,7 +264,7 @@ decryptIO output inputFile keyFile = do
     writeFile output (vigenereDecrypt keyContent inputContent)
 \end{code}
 
-\subsubsection{Main Function}
+\subsection*{Main Function}
 The \texttt{vig} function, works as entry point, just like the \texttt{caesar} and \texttt{otp} functions in the Caesar and OTP modules. It provides a simple command-line interface to generate keys, encrypt, decrypt, or crack Vigenère ciphers. Due to repetitive code, we have omitted the full implementation here.
 
 \hide{
