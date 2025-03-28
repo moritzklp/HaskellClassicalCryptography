@@ -136,6 +136,7 @@ findRepeatedSequences seqLen ctext =
 calculateDistances :: [(String, [Int])] -> [Int]
 calculateDistances = concatMap (\(_, positions) ->
   [pos2 - pos1 | (pos1:rest) <- tails positions, pos2 <- rest])
+
 \end{code}
 
 \subsubsection{Frequency Analysis and Key Length Estimation}
@@ -267,6 +268,7 @@ generateVigenereKeyIO keyLength =
 crackIO :: String -> String -> IO ()
 crackIO output inputFile = do
     ciphertext <- readFile inputFile
+    --putStrLn $ "Repeated sequences (length 3): " ++ show (findRepeatedSequences 3 ciphertext)
     let guessedKey = crackVigenere ciphertext
         guessedKeyLen = length guessedKey
         plaintext = vigenereDecrypt guessedKey ciphertext
