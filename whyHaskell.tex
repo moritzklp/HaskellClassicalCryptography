@@ -15,6 +15,7 @@ Haskell uses lazy evaluation, which means that it only computes the values when 
 This can help to improve the efficiency by avoiding unnecessary calculations. 
 For our many-time pad attack this would help to handle large ciphertexts efficiently by processing them only when required. 
 This also helps to reduce the memory usage and computation overhead.
+Lazy Evaluation may however be a security concern. It can lead to timing attacks which may leak sensitive information \cite{lazy2013}.
 
 \paragraph{Memory Safety}
 Unlike languages like C, Haskell automatically manages the memory, preventing vulnerabilities such as buffer overflows and pointer-related bugs. 

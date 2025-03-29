@@ -1,4 +1,13 @@
 
 \section{Conclusion}\label{sec:Conclusion}
 
+We have managed to implement encryption, decryption, for the Caesar, Vigenere, and One-Time Pad ciphers in Haskell. Additionaly our program allows for random key generation for all of them. We were also able to perform automated attacks, which allowed us to correctly guess the content of ciphertexts, for all implemented ciphers using brute force, frequency analysis, Kasiski examination and Friedmann tests, and Many-Time Pad. The program also contains a user interface to perform all those actions.
+
+We have found Haskell's functional paradigm to match very well with how cphers work. They are based on cryptograhic functions which simply take an input and provide an output. A few operations are sometimes chained together, but the state never needs to be preserved which fits perfectly with Haskell.
+
+\subsection{Future Work}
+Our program could be improved to fully guess the words from partially discovered plaintexts, especially when performing the Many-Time Pad attack.
+
+It would also be interesting to compare the performance of the Haskell implementations of the ciphers to other programming languages like C or Java. Cryptographic operations often need to be performed quickly in resource constrained systems so it would be interesting to see how well Haskell performs in such scenarios.
+
 Finally, we can see that \cite{liuWang2013:agentTypesHLPE} is a nice paper.
