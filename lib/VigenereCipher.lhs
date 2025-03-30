@@ -1,7 +1,11 @@
 \section{Vigenère Cipher}
-The Vigenère cipher is a polyalphabetic substitution cipher that encrypts alphabetic text by using a sequence of Caesar ciphers based on the letters of a keyword. Each letter of the key determines a shift for the corresponding character in the plaintext. Unlike the simple Caesar cipher, which uses one fixed shift, the Vigenère cipher employs multiple shifts determined by the key, making it more resilient against basic frequency analysis. However, methods like the Kasiski examination and the Friedman test can still be used to analyze and break it.
+The Vigenère cipher is a polyalphabetic substitution cipher that encrypts alphabetic text by using a sequence of shifts based on the letters of a keyword. 
+Each letter of the key determines a shift for the corresponding character in the plaintext. 
+Unlike the simple Caesar cipher, which uses one fixed shift, the Vigenère cipher employs multiple shifts determined by the key, 
+making it more resilient against basic frequency analysis. 
+However, methods like the Kasiski examination and the Friedman test can still be used to analyze and break it.
 
-This Haskell module implements the Vigenère cipher and includes functions for encryption, decryption, key generation, and cipher cracking. The code is structured into several functions, each addressing a specific aspect of the cipher operations.
+This Haskell module implements the Vigenère cipher and includes functions for encryption, decryption, key generation, and cipher cracking.
 
 \subsection*{Module Declaration and Imports}
 The module is named \texttt{VigenereCipher} and imports several libraries:
@@ -26,7 +30,8 @@ import Frequency (findBestShift)
 \end{code}
 
 \subsection*{Utility Functions and Constants}
-Constants such as \texttt{baseChar} and \texttt{endChar} define the range of uppercase letters. The function \texttt{shiftChar} applies a shift to a character, wrapping around if necessary.
+Constants such as \texttt{baseChar} and \texttt{endChar} define the range of uppercase letters. 
+The function \texttt{shiftChar} applies a shift to a character, wrapping around if necessary.
 
 \begin{code}
 baseChar, endChar :: Char
@@ -46,7 +51,8 @@ shiftChar s c
 \subsection*{Encryption and Decryption}
 The functions \texttt{vigenereEncrypt} and \texttt{vigenereDecrypt} perform the core operations:
 \begin{itemize}
-    \item \textbf{Encryption:} The plaintext is first cleaned (non-alphabetic characters removed and converted to uppercase). The encryption is achieved by cycling through the key and shifting each character by the value corresponding to the key letter.
+    \item \textbf{Encryption:} The plaintext is first cleaned (non-alphabetic characters removed and all letters converted to uppercase). 
+    The encryption is achieved by cycling through the key and shifting each character by the value corresponding to the key letter.
     \item \textbf{Decryption:} This function reverses the encryption by applying the negative of the shift.
 \end{itemize}
 
@@ -75,28 +81,35 @@ vigenereDecrypt key ciphertext
 \end{code}
 
 \subsection*{Finding Repeated Sequences and Calculating Distances}
-These functions implement the Kasiski examination \cite{Kasinski63}, a classical method for breaking polyalphabetic ciphers such as the Vigenère cipher by exploiting repeated sequences in the ciphertext.
+These functions implement the Kasiski examination \cite{Kasinski63}, 
+a classical method for breaking polyalphabetic ciphers such as the Vigenère cipher by exploiting repeated sequences in the ciphertext.
+Kasiski's method has two main components:
 
-\paragraph{Theory:}
 \begin{itemize}
   \item \textbf{Repeated Sequences:}  
-  When a specific sequence of letters appears more than once in the ciphertext, it is likely that the same portion of the key was used to encrypt different parts of the plaintext. Consequently, the distance (i.e., the number of characters) between these repeated sequences is often a multiple of the key length.
+  When a specific sequence of letters appears more than once in the ciphertext, 
+  it is likely that the same portion of the key was used to encrypt different parts of the plaintext. 
+  Consequently, the distance (i.e., the number of characters) between these repeated sequences is often a multiple of the key length.
   \item \textbf{Distance Analysis:}  
-  By calculating the distances between repeated sequences and then analyzing the common factors among these distances, one can infer the possible length of the key. Typically, the greatest common divisor (or the most common divisor) of these distances is a strong candidate for the key length.
+  By calculating the distances between repeated sequences and then analyzing the common factors among these distances, 
+  one can infer the possible length of the key. 
+  Typically, the greatest common divisor (or the most common divisor) of these distances is a strong candidate for the key length.
 \end{itemize}
 
-\paragraph{Implementation Details:}
+The components of the Kasiski examination are implemented as follows:
 \begin{itemize}
   \item \texttt{findRepeatedSequences}:  
   This function takes an integer \texttt{seqLen} representing the length of the sequence to search for. It:
   \begin{enumerate}
     \item Iterates over the ciphertext to extract all substrings of length \texttt{seqLen} along with their starting positions.
     \item Sorts these pairs so that identical sequences are grouped together.
-    \item Groups the sorted list by the sequence content using \texttt{groupBy}. Only groups with more than one occurrence (i.e., repeated sequences) are retained, and their starting indices are recorded.
+    \item Groups the sorted list by the sequence content using \texttt{groupBy}. 
+    Only groups with more than one occurrence (i.e., repeated sequences) are retained, and their starting indices are recorded.
   \end{enumerate}
   
   \item \texttt{calculateDistances}:  
-  Once the repeated sequences and their positions are known, this function computes all pairwise distances between the positions of each repeated sequence. These distances are used to detect common divisors, which in turn suggest likely key lengths.
+  Once the repeated sequences and their positions are known, this function computes all pairwise distances between the positions of each repeated sequence. 
+  These distances are used to detect common divisors, which in turn suggest likely key lengths.
 \end{itemize}
 
 \begin{code}
@@ -120,9 +133,11 @@ calculateDistances = concatMap (\(_, positions) ->
 \end{code}
 
 \subsection*{Frequency Analysis and Key Length Estimation}
-These functions employ statistical measures to refine the key length estimation and further assist in breaking the cipher.
+The Kasiski examination provides a set of candidate key lengths based on the distances between repeated sequences.
+However, it is not always definitive.
+To enhance the accuracy of key length estimation, and to help with further decryption, 
+we can apply statistical methods such as the Index of Coincidence (IC) and the Friedman test.
 
-\paragraph{Theory:}
 \begin{itemize}
   \item \textbf{Index of Coincidence (IC):}  
   The IC is a measure of the probability that two randomly selected letters from a text are the same. For a language like English, the IC is typically around 0.067. A lower IC indicates a more uniform distribution of letters, as seen in well-encrypted text, while a higher IC suggests a distribution similar to natural language.
@@ -153,6 +168,7 @@ These functions employ statistical measures to refine the key length estimation 
   \end{enumerate}
 \end{itemize}
 
+The aformentioned functions are implemented as follows:
 \begin{code}
 indexOfCoincidence :: String -> Double
 indexOfCoincidence text =

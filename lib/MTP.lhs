@@ -42,6 +42,7 @@ import Data.Word (Word8)
 import Data.Bits (xor)
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as C8
+import Pad (xorBytes)
 \end{code}
 
 The ciphertexts are loaded from a file, and then the program iterates over each ciphertext, and performs the Many-Time Pad attack.
@@ -96,10 +97,6 @@ hexToBytes (a:b:rest) = BS.cons (fromIntegral $ hexValue a * 16 + hexValue b) (h
             | c >= 'A' && c <= 'F' = ord c - ord 'A' + 10
             | otherwise = error $ "Invalid hex character: " ++ [c]
 hexToBytes _ = error "Invalid hex string: ciphertext must have even number of characters hex characters"
-
--- | XOR two ByteStrings together
-bytesXor :: BS.ByteString -> BS.ByteString -> BS.ByteString
-bytesXor a b = BS.pack $ zipWith xor (BS.unpack a) (BS.unpack b)
 \end{code}
 
 The Many-Time Pad attack uses the fact that a letter XOR-ed with a space returns a letter.
@@ -116,7 +113,7 @@ markAsSpace byte | isLikelySpace byte = 1
 -- | Find likely space positions for two ciphertexts
 detectSpacePositions :: BS.ByteString -> BS.ByteString -> [Int]
 detectSpacePositions ciphertext1 ciphertext2 =
-    map (markAsSpace . BS.index (bytesXor ciphertext1 ciphertext2)) [0 .. BS.length ciphertext1 - 1]
+    map (markAsSpace . BS.index (xorBytes ciphertext1 ciphertext2)) [0 .. BS.length ciphertext1 - 1]
 
 -- | Find likely space positions for all ciphertexts
 -- | A position is likely a space if it produces a letter when XORed with most other ciphertexts

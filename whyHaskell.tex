@@ -1,8 +1,8 @@
 \subsection{Haskell Background}
 \label{sec:why_haskell}
-Haskell offers several advantages that make it a strong candidate for implementing cryptographic attacks, 
-such as the Many-Time Pad attack. These benefits include performance, memory safety, and a strong type system. 
-They all contribute to writing secure and reliable (cryptographic code). 
+Haskell offers several advantages that make it a strong candidate for implementing classical cryptographic algorithms. 
+These benefits include performance, memory safety, and a strong type system. 
+They all contribute to writing secure and reliable (cryptographic) code. 
 
 \paragraph{Compiled and Optimized Execution} 
 Despite being a high-level functional language, Haskell can perform nearly as well as C. 
@@ -24,7 +24,7 @@ This is important in cryptographic applications because small memory errors can 
 
 \paragraph{Strong Type System}
 Haskell has a strong type system that ensures that variables hold only correct kinds of values. 
-This prevents unintended operations, such as treating a byte array as a stringmisinterpreting cryptographic data formats. 
+This prevents unintended operations, such as treating a byte array as a string, misinterpreting cryptographic data formats. 
 Programming on a type-level allows to encode security properties at compile time, which ensures that many classes of bugs are detected early.
 
 \paragraph{Immutability}

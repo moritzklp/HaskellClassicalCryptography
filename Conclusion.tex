@@ -1,13 +1,27 @@
 
 \section{Conclusion}\label{sec:Conclusion}
 
-We have managed to implement encryption, decryption, for the Caesar, Vigenere, and One-Time Pad ciphers in Haskell. Additionaly our program allows for random key generation for all of them. We were also able to perform automated attacks, which allowed us to correctly guess the content of ciphertexts, for all implemented ciphers using brute force, frequency analysis, Kasiski examination and Friedmann tests, and Many-Time Pad. The program also contains a user interface to perform all those actions.
+Our project successfully implemented encryption, decryption, and key generation capabilities for three classical ciphers: 
+Caesar, Vigenère, and One-Time Pad. 
+The Haskell implementation includes automated attacks for each cipher, enabling users to recover plaintext from ciphertexts through methods such as 
+brute force attacks, frequency analysis, Kasiski examination, Friedman tests, and the Many-Time Pad attack.
 
-We have found Haskell's functional paradigm to match very well with how cphers work. They are based on cryptograhic functions which simply take an input and provide an output. A few operations are sometimes chained together, but the state never needs to be preserved which fits perfectly with Haskell.
+The comprehensive user interface provides access to all implemented cryptographic operations and attack methods. 
+Throughout this project, we observed a good alignment between Haskell's functional programming paradigm and the implementation of classical ciphers. 
+The fact that classical ciphers are simply operations that transform inputs to outputs without maintaining state, 
+pairs elegantly with Haskell's functional approach. 
+Each cipher could be modeled as a series of pure functions, making the code both easy to understand 
+and closely resembling the mathematical descriptions of the cryptographic algorithms.
 
 \subsection{Future Work}
-Our program could be improved to fully guess the words from partially discovered plaintexts, especially when performing the Many-Time Pad attack.
+Our program has several opportunities for improvement. 
+A priority would be implementing more sophisticated word prediction algorithms to complete partially recovered plaintexts, 
+particularly when using the Many-Time Pad attack. This would increase the effectiveness of our cryptanalysis tools.
 
-It would also be interesting to compare the performance of the Haskell implementations of the ciphers to other programming languages like C or Java. Cryptographic operations often need to be performed quickly in resource constrained systems so it would be interesting to see how well Haskell performs in such scenarios.
+It would also be interesting to compare the performance of the Haskell implementations of the
+ciphers to other programming languages like C or Java. Cryptographic operations often need to
+be performed quickly in resource constrained systems so it would be interesting to see how well
+Haskell performs in such scenarios.
 
-Finally, we can see that \cite{liuWang2013:agentTypesHLPE} is a nice paper.
+The work by Liu and Wang on agent-based cryptographic systems \cite{liuWang2013:agentTypesHLPE} offers additional directions 
+for future development that could build upon our current implementation.

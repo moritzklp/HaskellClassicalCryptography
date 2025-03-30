@@ -1,6 +1,9 @@
 
 \section{Frequency Analysis}
-The idea here is to exploit the fact that in English (and most other natural languages), certain letters appear with predictable frequencies. For example, the letter 'e' is the most common letter in English text, followed by 't', 'a', 'o', etc.
+Frequency analysis is a powerful technique used in cryptography to break ciphers, especially monoalphabetic substitution ciphers like the Caesar cipher.
+The idea of frequency analysis is to exploit the fact that in English (and most other natural languages), 
+certain letters appear with predictable frequencies. 
+For example, the letter 'e' is the most common letter in English text, followed by 't', 'a', 'o', etc.
 In the code we define an expected frequency distribution for English letters \footnote{\url{https://en.wikipedia.org/wiki/Letter_frequency}}. 
 
 \begin{code}
@@ -18,9 +21,12 @@ englishFrequencies = [('a', 8.2), ('b', 1.5), ('c', 2.8), ('d', 4.3), ('e', 12.7
  ('y', 2.0), ('z', 0.074)]
 \end{code}
 
-Next, we filter the text to keep only the alphabetic characters and convert them to lowercase. This ensures that the frequency analysis is case-insensitive and not affected by non-alphabetic characters.
-The \texttt{normalize} function removes any non-alphabetical characters and converts the remaining ones to lowercase. This is very important for analysing how often words appear in a text.
-The \texttt{charFrequency} function then calculates how often a specific character appears in the text (after normalization) in relation to the total number of letters.
+Next, we filter the text to keep only the alphabetic characters and convert them to lowercase. 
+This ensures that the frequency analysis is case-insensitive and not affected by non-alphabetic characters.
+The \texttt{normalize} function removes any non-alphabetical characters and converts the remaining ones to lowercase. 
+This is very important for analysing how often words appear in a text.
+The \texttt{charFrequency} function then calculates how often a specific character appears in the text (after normalization) 
+in relation to the total number of letters.
 The \texttt{letterFrequencies} function builds a list of tuples for every letter from 'a' to 'z', each paired with its computed frequency in the text.
 
 \begin{code}
@@ -46,8 +52,11 @@ letterFrequencies :: String -> [(Char, Double)]
 letterFrequencies text = [(c, charFrequency c text) | c <- ['a'..'z']]
 \end{code}
 
-In the next part, we compare the observed frequencies (from a decrypted candidate) with the expected letter frequencies in standard English. This comparison helps us evaluate how ``English-like'' the decrypted text is. 
-The method we use is based on the \textit{chi-squared statistic}, a technique often used in statistical hypothesis testing. The lower the chi-squared value, the closer the candidate is to what is typical in English.\footnote{Idea adapted from \url{http://practicalcryptography.com/cryptanalysis/text-characterisation/chi-squared-statistic/}.}
+In the next part, we compare the observed frequencies (from a decrypted candidate) with the expected letter frequencies in standard English. 
+This comparison helps us evaluate how ``English-like'' the decrypted text is. 
+The method we use is based on the \textit{chi-squared statistic}, a technique often used in statistical hypothesis testing. 
+The lower the chi-squared value, the closer the candidate is to what is typical 
+in English \footnote{Idea adapted from \url{http://practicalcryptography.com/cryptanalysis/text-characterisation/chi-squared-statistic/}.}.
 
 \begin{code}
 -- | Calculate the chi-squared statistic between the observed and expected frequencies

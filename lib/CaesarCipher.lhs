@@ -1,11 +1,12 @@
 \section{Caesar Cipher}
-A Caesar cipher is a classical substitution cipher where each letter in the plaintext is replaced by a letter a fixed number of positions down the alphabet. For instance, with a shift of 3, the letter A is replaced by D, B by E, and so on. Despite its simplicity and vulnerability to frequency analysis, the Caesar cipher is a fundamental example in the study of cryptography.
+A Caesar cipher is a monoalphabetic substitution cipher, 
+where each letter in the plaintext is replaced by a letter a fixed number of positions down the alphabet. 
+For instance, with a shift of 3, the letter A is replaced by D, B by E, and so on. 
+Despite its simplicity and vulnerability to brute force attacks, the Caesar cipher is a fundamental example in the study of cryptography.
 
-The module provides functionality for \textit{encrypting}, \textit{decrypting}, \textit{generating keys}, and \textit{cracking} Caesar ciphers.
+The Caesar cipher module provides functionality for encryption, decryption, generating keys, and cracking Caesar ciphers.
 
-The code is structured into several functions, each addressing a specific aspect of the cipher operations.
-
-\subsection*{Module and Imports}
+\subsection*{Module Declaration and Imports}
 The module starts by declaring its name and importing necessary libraries:
 \begin{itemize}
     \item \texttt{System.IO} for input/output operations.
@@ -76,7 +77,9 @@ decryptIO output inputFile keyFile = do
 \end{code}
 
 \subsection*{Key Generation Functions}
-The function \texttt{generateCaesarKeyIO} generates a random shift between 1 and 25 using a random number generator. The function \texttt{generateKeyFromPlaintextIO} then uses this key to create a key file for a given plaintext file, even though the plaintext is not directly used in generating the key.
+The function \texttt{generateCaesarKeyIO} generates a random shift between 1 and 25 using a random number generator. 
+The function \texttt{generateKeyFromPlaintextIO} then uses this key to create a key file for a given plaintext file, 
+even though the plaintext is not directly used in generating the key.
 
 \begin{code}
 generateCaesarKeyIO :: IO String
@@ -114,7 +117,8 @@ crackIO output inputFile = do
 \end{code}
 
 \subsection*{User Interface}
-The \texttt{caesar} function provides a simple command-line interface that promts the user to choose an action (generate, encrypt, decrypt, or crack) and then reads the necessary file names. It then calls the appropriate function based on the user's input.
+The \texttt{caesar} function provides a simple command-line interface that promts the user to choose an action (generate, encrypt, decrypt, or crack) 
+and then reads the necessary file names. It then calls the appropriate function based on the user's input.
 
 \begin{code}
 caesar :: IO ()

@@ -1,14 +1,15 @@
 \section{Introduction}
-In this project\footnote{\url{https://github.com/moritzklp/FP-ProjectTP}}, we explore fundamental principles of classical cryptography by implementing three historical ciphers: One-Time Pad (OTP), Caesar, and Vigenère. 
+In this project\footnote{\url{https://github.com/moritzklp/FP-ProjectTP}}, 
+we explore fundamental principles of classical cryptography by implementing three historical ciphers: Caesar, Vigenère, and One-Time Pad (OTP). 
 Alongside implementing these encryption techniques, we also investigate their weaknesses and known cryptographic attacks. 
 Specifically, we focus on:
 
 \begin{itemize}
-    \item Many-Time Pad (MTP) attacks on OTP, demonstrating how key reuse undermines its security.
     \item Frequency analysis on the Caesar cipher (and monoalphabetic substitutions in general), 
     showing how statistical patterns in natural language can reveal encrypted messages.
     \item Kasiski examination and Friedmann tests on Vigenère, 
     which exploits repeating patterns in the ciphertext to determine the key length and ultimately decrypt the message.
+    \item Many-Time Pad (MTP) attacks on OTP, demonstrating how key reuse undermines its security.
 \end{itemize}
 
 Our approach includes encrypting and decrypting natural language messages, generating secure random keys, 
