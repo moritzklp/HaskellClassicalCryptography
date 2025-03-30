@@ -1,3 +1,7 @@
+\section{Tests}
+
+This section contains tests for the different modules we implemented.
+
 \begin{code}
 module Main where
 
@@ -24,4 +28,10 @@ main = hspec $ do
   describe "Pad (XOR Helper) Tests" TestPad.spec
 \end{code}
 
-To run the tests, use \verb|stack test|.
+For the Caesar and Vigenère ciphers, we test that the encryption and decryption functions work correctly, even with mixed case and punctuation. 
+We also check the frequency analysis to see if it can crack Caesar ciphers automatically. 
+The OTP tests ensure that the one-time pad behaves as expected, including partial decryption of real ciphertexts. 
+For the Many-Time Pad, we test a given set of challenge ciphertexts and check if our code can recover at least 75\% of the original message. 
+One of the tests even compares the output to a known Albert Einstein quote to see if it matches well.
+Finally, we test the XOR helper functions to ensure they're reversible and correct.
+These tests help us ensure that our code works as intended.
